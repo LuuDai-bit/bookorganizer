@@ -1,8 +1,9 @@
 package models
 
 import (
-	"os/exec"
 	"time"
+
+	"github.com/google/uuid"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -17,10 +18,10 @@ type Session struct {
 
 type SessionModel struct{}
 
-func (s *SessionModel) CreateSession(user_id primitive.ObjectID) ([]byte, error) {
+func (s *SessionModel) CreateSession(user_id primitive.ObjectID) (string, error) {
 	collection := dbConnect.Database(databaseName).Collection("sessions")
 
-	token, _ := exec.Command("uuidgen").Output()
+	token := uuid.New().String()
 	_, err := collection.InsertOne(nil, bson.M{
 		"expire_time": time.Now().Add(24 * time.Hour),
 		"token":       token,
@@ -33,7 +34,7 @@ func (s *SessionModel) CreateSession(user_id primitive.ObjectID) ([]byte, error)
 func (s *SessionModel) Destroy(token string) (*mongo.DeleteResult, error) {
 	collection := dbConnect.Database(databaseName).Collection("sessions")
 
-	filter := bson.D{{"token", []byte(token)}}
+	filter := bson.D{{"token", token}}
 	result, err := collection.DeleteOne(nil, filter)
 
 	return result, err
@@ -42,7 +43,7 @@ func (s *SessionModel) Destroy(token string) (*mongo.DeleteResult, error) {
 func (s *SessionModel) FindOne(token string) (Session, error) {
 	collection := dbConnect.Database(databaseName).Collection("sessions")
 
-	filter := bson.D{{"token", []byte(token)}}
+	filter := bson.D{{"token", token}}
 	var session Session
 	err := collection.FindOne(nil, filter).Decode(&session)
 

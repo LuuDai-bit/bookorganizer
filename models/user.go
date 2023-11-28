@@ -63,7 +63,7 @@ func (u *UserModel) SignIn(data forms.SignInUserCommand) (string, error) {
 	var session SessionModel
 	token, err := session.CreateSession(user.ID)
 
-	return string(token), err
+	return token, err
 }
 
 func (u *UserModel) UpdatePassword(data forms.UpdateUserPasswordCommand) error {
