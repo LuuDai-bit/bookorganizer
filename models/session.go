@@ -11,9 +11,9 @@ import (
 )
 
 type Session struct {
-	ExpireTime primitive.Timestamp `bson:"expire_time"`
-	Token      string              `json:"token" bson:"token"`
-	UserId     primitive.ObjectID  `json:"user_id" bson:"user_id"`
+	ExpireTime primitive.DateTime `bson:"expire_time"`
+	Token      string             `json:"token" bson:"token"`
+	UserId     primitive.ObjectID `json:"user_id" bson:"user_id"`
 }
 
 type SessionModel struct{}

@@ -1,6 +1,8 @@
 package models
 
 import (
+	"book-organizer/forms"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -18,8 +20,8 @@ type Book struct {
 	PurchaseDate primitive.DateTime `json:"purchase_date" bson:"purchase_date"`
 	StartReadAt  primitive.DateTime `json:"start_read_at" bson:"start_read_at"`
 	FinishReadAt primitive.DateTime `json:"finish_read_at" bson:"finish_read_at"`
-	Categories   []string
-	Reviews      []Review
+	Categories   []string           `json:"categories" bson:"categories"`
+	Reviews      []Review           `json:"reviews" bson:"reviews"`
 }
 
 type BookModel struct{}
@@ -38,4 +40,19 @@ func (b *BookModel) GetBooksByUser(user_id primitive.ObjectID, page int) []Book 
 	}
 
 	return books
+}
+
+func (b *BookModel) CreateBook(user_id primitive.ObjectID, book forms.CreateBookCommand) error {
+	collection := dbConnect.Database(databaseName).Collection("books")
+
+	_, err := collection.InsertOne(nil, bson.M{
+		"name":           book.Name,
+		"author":         book.Author,
+		"purchase_date":  book.PurchaseDate,
+		"start_read_at":  nil,
+		"finish_read_at": nil,
+		"categories":     book.Categories,
+	})
+
+	return err
 }
