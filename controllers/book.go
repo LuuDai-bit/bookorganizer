@@ -16,6 +16,9 @@ func (b *BookController) GetBooks(c *gin.Context) {
 	page, err := strconv.Atoi(c.Param("page"))
 	if err != nil {
 		c.JSON(400, gin.H{"message": "Page must be a number"})
+		c.Abort()
+
+		return
 	}
 
 	user := current_user(c)
@@ -39,6 +42,32 @@ func (b *BookController) CreateBook(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(400, gin.H{"message": "Error when create book"})
+		c.Abort()
+
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Success"})
+}
+
+func (b *BookController) UpdateBook(c *gin.Context) {
+	var data forms.UpdateBookCommand
+
+	if c.BindJSON(&data) != nil {
+		c.JSON(406, gin.H{"message": "Provide relevant fields"})
+		c.Abort()
+
+		return
+	}
+
+	user := current_user(c)
+	err := bookModel.UpdateBook(user.ID, data)
+
+	if err != nil {
+		c.JSON(400, gin.H{"message": "Error when update book"})
+		c.Abort()
+
+		return
 	}
 
 	c.JSON(200, gin.H{"message": "Success"})

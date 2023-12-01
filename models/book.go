@@ -2,6 +2,7 @@ package models
 
 import (
 	"book-organizer/forms"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -45,14 +46,61 @@ func (b *BookModel) GetBooksByUser(user_id primitive.ObjectID, page int) []Book 
 func (b *BookModel) CreateBook(user_id primitive.ObjectID, book forms.CreateBookCommand) error {
 	collection := dbConnect.Database(databaseName).Collection("books")
 
-	_, err := collection.InsertOne(nil, bson.M{
+	purchaseDate, err := time.Parse(time.DateOnly, book.PurchaseDate)
+	if err != nil {
+		return err
+	}
+
+	_, err = collection.InsertOne(nil, bson.M{
+		"user_id":        user_id,
 		"name":           book.Name,
 		"author":         book.Author,
-		"purchase_date":  book.PurchaseDate,
+		"purchase_date":  purchaseDate,
 		"start_read_at":  nil,
 		"finish_read_at": nil,
 		"categories":     book.Categories,
 	})
 
 	return err
+}
+
+func (b *BookModel) UpdateBook(user_id primitive.ObjectID, book forms.UpdateBookCommand) error {
+	collection := dbConnect.Database(databaseName).Collection("books")
+	bookID, _ := primitive.ObjectIDFromHex(book.ID)
+	filter := bson.D{{"user_id", user_id}, {"_id", bookID}}
+	purchaseDate, startReadAt, finishReadAt, err := ConvertBookDateField(book)
+	if err != nil {
+		return err
+	}
+
+	update := bson.D{{"$set", bson.D{
+		{"name", book.Name},
+		{"author", book.Author},
+		{"purchase_date", purchaseDate},
+		{"start_read_at", startReadAt},
+		{"finish_read_at", finishReadAt},
+		{"categories", book.Categories},
+	}}}
+
+	_, err = collection.UpdateOne(nil, filter, update)
+
+	return err
+}
+
+func ConvertBookDateField(book forms.UpdateBookCommand) (time.Time, time.Time, time.Time, error) {
+	purchaseDate, errPD := time.Parse(time.DateOnly, book.PurchaseDate)
+	startReadAt, errSRA := time.Parse(time.DateTime, book.StartReadAt)
+	finishReadAt, errFRA := time.Parse(time.DateTime, book.FinishReadAt)
+
+	var err error
+	switch {
+	case book.PurchaseDate != "" && errPD != nil:
+		err = errPD
+	case book.StartReadAt != "" && errSRA != nil:
+		err = errSRA
+	case book.FinishReadAt != "" && errFRA != nil:
+		err = errFRA
+	}
+
+	return purchaseDate, startReadAt, finishReadAt, err
 }

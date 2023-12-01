@@ -30,6 +30,7 @@ func main() {
 		v1.GET("/users/me", user.ShowDetail)
 		v1.GET("/books/:page", book.GetBooks)
 		v1.POST("/books/create", book.CreateBook)
+		v1.PATCH("/books/update", book.UpdateBook)
 	}
 
 	router.NoRoute(func(c *gin.Context) {
