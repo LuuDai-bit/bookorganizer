@@ -44,6 +44,11 @@ func (b *BookModel) GetBooksByUser(user_id primitive.ObjectID, page int) []Book 
 }
 
 func (b *BookModel) CreateBook(user_id primitive.ObjectID, book forms.CreateBookCommand) error {
+	validate_err := ValidateStruct(book)
+	if validate_err != nil {
+		return validate_err
+	}
+
 	collection := dbConnect.Database(databaseName).Collection("books")
 
 	purchaseDate, err := time.Parse(time.DateOnly, book.PurchaseDate)
@@ -65,6 +70,11 @@ func (b *BookModel) CreateBook(user_id primitive.ObjectID, book forms.CreateBook
 }
 
 func (b *BookModel) UpdateBook(user_id primitive.ObjectID, book forms.UpdateBookCommand) error {
+	validate_err := ValidateStruct(book)
+	if validate_err != nil {
+		return validate_err
+	}
+
 	collection := dbConnect.Database(databaseName).Collection("books")
 	bookID, _ := primitive.ObjectIDFromHex(book.ID)
 	filter := bson.D{{"user_id", user_id}, {"_id", bookID}}
