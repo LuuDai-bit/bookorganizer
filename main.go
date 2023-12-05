@@ -17,6 +17,7 @@ func main() {
 	user := new(controllers.UserController)
 	session := new(controllers.SessionController)
 	book := new(controllers.BookController)
+	review := new(controllers.ReviewController)
 	v1 := router.Group("/api/v1")
 	{
 		v1.GET("/health", health.Status)
@@ -31,6 +32,8 @@ func main() {
 		v1.GET("/books/:page", book.GetBooks)
 		v1.POST("/books/create", book.CreateBook)
 		v1.PATCH("/books/update", book.UpdateBook)
+		v1.POST("reviews/create", review.CreateReview)
+		v1.PATCH("reviews/update", review.UpdateReview)
 	}
 
 	router.NoRoute(func(c *gin.Context) {

@@ -8,11 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Review struct {
-	Point   int    `json:"point" bson:"point"`
-	Comment string `json:"comment" bson:"comment"`
-}
-
 type Book struct {
 	ID           primitive.ObjectID `bson:"_id" json:"id"`
 	UserId       primitive.ObjectID `bson:"user_id" json:"user_id"`

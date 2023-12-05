@@ -4,12 +4,14 @@ go 1.21.4
 
 require (
 	github.com/gin-gonic/gin v1.9.1
+	github.com/go-playground/validator/v10 v10.16.0
 	github.com/google/uuid v1.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.17.0
 	github.com/vsouza/go-gin-boilerplate v0.0.0-20230605143208-14b6a270707d
 	go.mongodb.org/mongo-driver v1.13.0
 	golang.org/x/crypto v0.15.0
+	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 )
 
 require (
@@ -21,7 +23,6 @@ require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.16.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
