@@ -6,10 +6,10 @@ import (
 	"book-organizer/models"
 )
 
-func current_user(c *gin.Context) models.User {
+func currentUser(c *gin.Context) models.User {
 	token := c.GetHeader("Token")
 	session, _ := sessionModel.FindOne(token)
-	user, err := userModel.FindOne(session.UserId)
+	user, err := userModel.FindOne(session.UserID)
 
 	if err != nil {
 		c.AbortWithStatusJSON(404, gin.H{"error": "User not found"})

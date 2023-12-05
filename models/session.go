@@ -13,19 +13,19 @@ import (
 type Session struct {
 	ExpireTime primitive.DateTime `bson:"expire_time"`
 	Token      string             `json:"token" bson:"token"`
-	UserId     primitive.ObjectID `json:"user_id" bson:"user_id"`
+	UserID     primitive.ObjectID `json:"user_id" bson:"user_id"`
 }
 
 type SessionModel struct{}
 
-func (s *SessionModel) CreateSession(user_id primitive.ObjectID) (string, error) {
+func (s *SessionModel) CreateSession(userID primitive.ObjectID) (string, error) {
 	collection := dbConnect.Database(databaseName).Collection("sessions")
 
 	token := uuid.New().String()
 	_, err := collection.InsertOne(nil, bson.M{
 		"expire_time": time.Now().Add(24 * time.Hour),
 		"token":       token,
-		"user_id":     user_id,
+		"user_id":     userID,
 	})
 
 	return token, err

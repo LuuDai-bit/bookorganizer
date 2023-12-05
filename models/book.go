@@ -10,7 +10,7 @@ import (
 
 type Book struct {
 	ID           primitive.ObjectID `bson:"_id" json:"id"`
-	UserId       primitive.ObjectID `bson:"user_id" json:"user_id"`
+	UserID       primitive.ObjectID `bson:"user_id" json:"user_id"`
 	Name         string             `json:"name" bson:"name"`
 	Author       string             `json:"author" bson:"author"`
 	PurchaseDate primitive.DateTime `json:"purchase_date" bson:"purchase_date"`
@@ -22,9 +22,9 @@ type Book struct {
 
 type BookModel struct{}
 
-func (b *BookModel) GetBooksByUser(user_id primitive.ObjectID, page int) []Book {
+func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int) []Book {
 	collection := dbConnect.Database(databaseName).Collection("books")
-	filter := bson.D{{"user_id", user_id}}
+	filter := bson.D{{"user_id", userID}}
 	cursor, err := collection.Find(nil, filter)
 	if err != nil {
 		panic(err)
@@ -38,7 +38,7 @@ func (b *BookModel) GetBooksByUser(user_id primitive.ObjectID, page int) []Book 
 	return books
 }
 
-func (b *BookModel) CreateBook(user_id primitive.ObjectID, book forms.CreateBookCommand) error {
+func (b *BookModel) CreateBook(userID primitive.ObjectID, book forms.CreateBookCommand) error {
 	validate_err := ValidateStruct(book)
 	if validate_err != nil {
 		return validate_err
@@ -52,7 +52,7 @@ func (b *BookModel) CreateBook(user_id primitive.ObjectID, book forms.CreateBook
 	}
 
 	_, err = collection.InsertOne(nil, bson.M{
-		"user_id":        user_id,
+		"user_id":        userID,
 		"name":           book.Name,
 		"author":         book.Author,
 		"purchase_date":  purchaseDate,
@@ -64,7 +64,7 @@ func (b *BookModel) CreateBook(user_id primitive.ObjectID, book forms.CreateBook
 	return err
 }
 
-func (b *BookModel) UpdateBook(user_id primitive.ObjectID, book forms.UpdateBookCommand) error {
+func (b *BookModel) UpdateBook(userID primitive.ObjectID, book forms.UpdateBookCommand) error {
 	validate_err := ValidateStruct(book)
 	if validate_err != nil {
 		return validate_err
@@ -72,7 +72,7 @@ func (b *BookModel) UpdateBook(user_id primitive.ObjectID, book forms.UpdateBook
 
 	collection := dbConnect.Database(databaseName).Collection("books")
 	bookID, _ := primitive.ObjectIDFromHex(book.ID)
-	filter := bson.D{{"user_id", user_id}, {"_id", bookID}}
+	filter := bson.D{{"user_id", userID}, {"_id", bookID}}
 	purchaseDate, startReadAt, finishReadAt, err := ConvertBookDateField(book)
 	if err != nil {
 		return err

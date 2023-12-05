@@ -21,7 +21,7 @@ func (r *ReviewController) CreateReview(c *gin.Context) {
 		return
 	}
 
-	user := current_user(c)
+	user := currentUser(c)
 	err := reviewModel.CreateReview(user.ID, data)
 
 	if err != nil {
@@ -44,7 +44,7 @@ func (r *ReviewController) UpdateReview(c *gin.Context) {
 		return
 	}
 
-	user := current_user(c)
+	user := currentUser(c)
 	err := reviewModel.UpdateReview(user.ID, data)
 
 	if err != nil {

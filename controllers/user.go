@@ -54,7 +54,7 @@ func (u *UserController) UpdatePassword(c *gin.Context) {
 }
 
 func (u *UserController) ShowDetail(c *gin.Context) {
-	user := current_user(c)
+	user := currentUser(c)
 
 	c.JSON(200, gin.H{"message": "Success", "user": user})
 }

@@ -21,7 +21,7 @@ func (b *BookController) GetBooks(c *gin.Context) {
 		return
 	}
 
-	user := current_user(c)
+	user := currentUser(c)
 	books := bookModel.GetBooksByUser(user.ID, page)
 
 	c.JSON(200, gin.H{"message": "Success", "books": books})
@@ -37,7 +37,7 @@ func (b *BookController) CreateBook(c *gin.Context) {
 		return
 	}
 
-	user := current_user(c)
+	user := currentUser(c)
 	err := bookModel.CreateBook(user.ID, data)
 
 	if err != nil {
@@ -60,7 +60,7 @@ func (b *BookController) UpdateBook(c *gin.Context) {
 		return
 	}
 
-	user := current_user(c)
+	user := currentUser(c)
 	err := bookModel.UpdateBook(user.ID, data)
 
 	if err != nil {
