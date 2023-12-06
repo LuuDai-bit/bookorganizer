@@ -24,7 +24,7 @@ type BookModel struct{}
 
 func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int) []Book {
 	collection := dbConnect.Database(databaseName).Collection("books")
-	filter := bson.D{{"user_id", userID}}
+	filter := bson.D{{Key: "user_id", Value: userID}}
 	cursor, err := collection.Find(nil, filter)
 	if err != nil {
 		panic(err)
@@ -72,19 +72,19 @@ func (b *BookModel) UpdateBook(userID primitive.ObjectID, book forms.UpdateBookC
 
 	collection := dbConnect.Database(databaseName).Collection("books")
 	bookID, _ := primitive.ObjectIDFromHex(book.ID)
-	filter := bson.D{{"user_id", userID}, {"_id", bookID}}
+	filter := bson.D{{Key: "user_id", Value: userID}, {Key: "_id", Value: bookID}}
 	purchaseDate, startReadAt, finishReadAt, err := ConvertBookDateField(book)
 	if err != nil {
 		return err
 	}
 
-	update := bson.D{{"$set", bson.D{
-		{"name", book.Name},
-		{"author", book.Author},
-		{"purchase_date", purchaseDate},
-		{"start_read_at", startReadAt},
-		{"finish_read_at", finishReadAt},
-		{"categories", book.Categories},
+	update := bson.D{{Key: "$set", Value: bson.D{
+		{Key: "name", Value: book.Name},
+		{Key: "author", Value: book.Author},
+		{Key: "purchase_date", Value: purchaseDate},
+		{Key: "start_read_at", Value: startReadAt},
+		{Key: "finish_read_at", Value: finishReadAt},
+		{Key: "categories", Value: book.Categories},
 	}}}
 
 	_, err = collection.UpdateOne(nil, filter, update)

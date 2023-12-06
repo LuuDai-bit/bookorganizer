@@ -34,7 +34,7 @@ func (s *SessionModel) CreateSession(userID primitive.ObjectID) (string, error) 
 func (s *SessionModel) Destroy(token string) (*mongo.DeleteResult, error) {
 	collection := dbConnect.Database(databaseName).Collection("sessions")
 
-	filter := bson.D{{"token", token}}
+	filter := bson.D{{Key: "token", Value: token}}
 	result, err := collection.DeleteOne(nil, filter)
 
 	return result, err
@@ -43,7 +43,7 @@ func (s *SessionModel) Destroy(token string) (*mongo.DeleteResult, error) {
 func (s *SessionModel) FindOne(token string) (Session, error) {
 	collection := dbConnect.Database(databaseName).Collection("sessions")
 
-	filter := bson.D{{"token", token}}
+	filter := bson.D{{Key: "token", Value: token}}
 	var session Session
 	err := collection.FindOne(nil, filter).Decode(&session)
 

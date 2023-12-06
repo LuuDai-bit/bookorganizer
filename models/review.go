@@ -25,7 +25,7 @@ func (r *ReviewModel) CreateReview(userID primitive.ObjectID, review forms.Creat
 
 	collection := dbConnect.Database(databaseName).Collection("books")
 	bookID, _ := primitive.ObjectIDFromHex(review.BookID)
-	filter := bson.D{{"user_id", userID}, {"_id", bookID}}
+	filter := bson.D{{Key: "user_id", Value: userID}, {Key: "_id", Value: bookID}}
 
 	var book Book
 	err := collection.FindOne(nil, filter).Decode(&book)
@@ -53,7 +53,7 @@ func (r *ReviewModel) UpdateReview(userID primitive.ObjectID, review forms.Updat
 
 	collection := dbConnect.Database(databaseName).Collection("books")
 	bookID, _ := primitive.ObjectIDFromHex(review.BookID)
-	filter := bson.D{{"user_id", userID}, {"_id", bookID}}
+	filter := bson.D{{Key: "user_id", Value: userID}, {Key: "_id", Value: bookID}}
 
 	var book Book
 	err := collection.FindOne(nil, filter).Decode(&book)
@@ -91,7 +91,7 @@ func getReviewIndexByID(reviews []Review, id primitive.ObjectID) int {
 }
 
 func updateBookReview(collection *mongo.Collection, reviews []Review, filter primitive.D) error {
-	update := bson.D{{"$set", bson.D{{"reviews", reviews}}}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "reviews", Value: reviews}}}}
 	_, err := collection.UpdateOne(nil, filter, update)
 
 	return err

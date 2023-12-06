@@ -22,7 +22,7 @@ type UserModel struct{}
 
 func (u *UserModel) Signup(data forms.SignupUserCommand) error {
 	collection := dbConnect.Database(databaseName).Collection("users")
-	filter := bson.D{{"email", data.Email}}
+	filter := bson.D{{Key: "email", Value: data.Email}}
 	count, _ := collection.CountDocuments(nil, filter)
 
 	if count > 0 {
@@ -42,7 +42,7 @@ func (u *UserModel) Signup(data forms.SignupUserCommand) error {
 
 func (u *UserModel) SignIn(data forms.SignInUserCommand) (string, error) {
 	collection := dbConnect.Database(databaseName).Collection("users")
-	filter := bson.D{{"email", data.Email}}
+	filter := bson.D{{Key: "email", Value: data.Email}}
 	var user User
 	err := collection.FindOne(context.TODO(), filter).Decode(&user)
 
@@ -69,13 +69,13 @@ func (u *UserModel) SignIn(data forms.SignInUserCommand) (string, error) {
 func (u *UserModel) UpdatePassword(data forms.UpdateUserPasswordCommand) error {
 	collection := dbConnect.Database(databaseName).Collection("users")
 	id, _ := primitive.ObjectIDFromHex(data.ID)
-	filter := bson.D{{"_id", id}}
+	filter := bson.D{{Key: "_id", Value: id}}
 	if !ValidOldPassword(collection, data, filter) {
 		return errors.New("Password Incorrect")
 	}
 
 	new_password, _ := HashPassword(data.NewPassword)
-	update := bson.D{{"$set", bson.D{{"password", new_password}}}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "password", Value: new_password}}}}
 
 	_, err := collection.UpdateOne(nil, filter, update)
 
@@ -84,7 +84,7 @@ func (u *UserModel) UpdatePassword(data forms.UpdateUserPasswordCommand) error {
 
 func (u *UserModel) FindOne(id primitive.ObjectID) (User, error) {
 	collection := dbConnect.Database(databaseName).Collection("users")
-	filter := bson.D{{"_id", id}}
+	filter := bson.D{{Key: "_id", Value: id}}
 	var user User
 	err := collection.FindOne(nil, filter).Decode(&user)
 
