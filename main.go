@@ -18,6 +18,7 @@ func main() {
 	session := new(controllers.SessionController)
 	book := new(controllers.BookController)
 	review := new(controllers.ReviewController)
+	statistic := new(controllers.StatisticController)
 	v1 := router.Group("/api/v1")
 	{
 		v1.GET("/health", health.Status)
@@ -32,8 +33,9 @@ func main() {
 		v1.GET("/books/:page", book.GetBooks)
 		v1.POST("/books/create", book.CreateBook)
 		v1.PATCH("/books/update", book.UpdateBook)
-		v1.POST("reviews/create", review.CreateReview)
-		v1.PATCH("reviews/update", review.UpdateReview)
+		v1.POST("/reviews/create", review.CreateReview)
+		v1.PATCH("/reviews/update", review.UpdateReview)
+		v1.GET("/statistic/books/read/:year/:month", statistic.CountBook)
 	}
 
 	router.NoRoute(func(c *gin.Context) {
