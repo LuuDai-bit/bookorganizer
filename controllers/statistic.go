@@ -23,3 +23,10 @@ func (s *StatisticController) CountBook(c *gin.Context) {
 
 	c.JSON(200, gin.H{"message": "Success", "result": result})
 }
+
+func (s *StatisticController) GetFavoriteCateogries(c *gin.Context) {
+	statistic := new(services.BookStatistic)
+	result := statistic.FavoriteCategories()
+
+	c.JSON(200, gin.H{"message": "Success", "result": result})
+}

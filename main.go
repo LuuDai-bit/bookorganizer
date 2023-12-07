@@ -35,7 +35,8 @@ func main() {
 		v1.PATCH("/books/update", book.UpdateBook)
 		v1.POST("/reviews/create", review.CreateReview)
 		v1.PATCH("/reviews/update", review.UpdateReview)
-		v1.GET("/statistic/books/read/:year/:month", statistic.CountBook)
+		v1.GET("/statistic/books/read/:year", statistic.CountBook)
+		v1.GET("/statistic/categories/favorite", statistic.GetFavoriteCateogries)
 	}
 
 	router.NoRoute(func(c *gin.Context) {

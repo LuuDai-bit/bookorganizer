@@ -33,3 +33,46 @@ func (b *BookStatistic) NumberOfBookRead(year string) []bson.M {
 
 	return results
 }
+
+func (b *BookStatistic) FavoriteCategories() []bson.M {
+	collection := prepareCollection("books")
+	project := bson.D{
+		{Key: "$project", Value: bson.D{
+			{Key: "id", Value: "$id"},
+			{Key: "categories", Value: "$categories"},
+		}},
+	}
+	unwind := bson.D{
+		{Key: "$unwind", Value: "$categories"},
+	}
+	group := bson.D{
+		{Key: "$group", Value: bson.D{
+			{Key: "_id", Value: "$categories"},
+			{Key: "tags", Value: bson.D{
+				{Key: "$sum", Value: 1},
+			}},
+		}},
+	}
+	projectAfter := bson.D{
+		{Key: "$project", Value: bson.D{
+			{Key: "_id", Value: 0},
+			{Key: "category", Value: "$_id"},
+			{Key: "book_count", Value: "$tags"},
+		}},
+	}
+	sort := bson.D{
+		{Key: "$sort", Value: bson.D{{Key: "tags", Value: -1}}},
+	}
+
+	cursor, err := collection.Aggregate(nil, mongo.Pipeline{project, unwind, group, projectAfter, sort})
+	if err != nil {
+		panic(err)
+	}
+
+	var results []bson.M
+	if err = cursor.All(nil, &results); err != nil {
+		panic(err)
+	}
+
+	return results
+}
