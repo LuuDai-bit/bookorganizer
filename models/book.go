@@ -6,6 +6,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Book struct {
@@ -24,8 +25,9 @@ type BookModel struct{}
 
 func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int) []Book {
 	collection := dbConnect.Database(databaseName).Collection("books")
-	filter := bson.D{{Key: "user_id", Value: userID}}
-	cursor, err := collection.Find(nil, filter)
+	filter := bson.D{{Key: "$match", Value: bson.D{{Key: "user_id", Value: userID}}}}
+	sort := bson.D{{Key: "$sort", Value: bson.D{{Key: "purchase_date", Value: -1}}}}
+	cursor, err := collection.Aggregate(nil, mongo.Pipeline{filter, sort})
 	if err != nil {
 		panic(err)
 	}
