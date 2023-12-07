@@ -61,7 +61,7 @@ func (b *BookStatistic) FavoriteCategories() []bson.M {
 		}},
 	}
 	sort := bson.D{
-		{Key: "$sort", Value: bson.D{{Key: "tags", Value: -1}}},
+		{Key: "$sort", Value: bson.D{{Key: "book_count", Value: -1}}},
 	}
 
 	cursor, err := collection.Aggregate(nil, mongo.Pipeline{project, unwind, group, projectAfter, sort})
