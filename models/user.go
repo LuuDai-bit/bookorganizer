@@ -50,14 +50,18 @@ func (u *UserModel) SignIn(data forms.SignInUserCommand) (string, error) {
 		if err == mongo.ErrNoDocuments {
 			return "", err
 		}
+	}
 
-		panic(err)
+	if !user.IsVerified {
+		err = errors.New("Email not verify")
+
+		return "", err
 	}
 
 	if !CheckPasswordHash(data.Password, user.Password) {
 		err = errors.New("Email or password incorrect")
 
-		panic(err)
+		return "", err
 	}
 
 	var session SessionModel
@@ -85,6 +89,15 @@ func (u *UserModel) UpdatePassword(data forms.UpdateUserPasswordCommand) error {
 func (u *UserModel) FindOne(id primitive.ObjectID) (User, error) {
 	collection := dbConnect.Database(databaseName).Collection("users")
 	filter := bson.D{{Key: "_id", Value: id}}
+	var user User
+	err := collection.FindOne(nil, filter).Decode(&user)
+
+	return user, err
+}
+
+func (u *UserModel) FindOneByEmail(email string) (User, error) {
+	collection := dbConnect.Database(databaseName).Collection("users")
+	filter := bson.D{{Key: "email", Value: email}}
 	var user User
 	err := collection.FindOne(nil, filter).Decode(&user)
 
