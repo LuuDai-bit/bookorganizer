@@ -37,7 +37,7 @@ func (v *VerifyModel) SendVerifyCode(email string) error {
 	verifyCode := v.generateVerifyCode(email)
 
 	verifyMail := new(mails.VerifyMail)
-	verifyMail.SendVerifyCode(email, verifyCode)
+	go verifyMail.SendVerifyCode(email, verifyCode)
 
 	return err
 }
