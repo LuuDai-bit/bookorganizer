@@ -26,8 +26,31 @@ func (v *VerifyController) SendVerifyCode(c *gin.Context) {
 	if err != nil {
 		c.JSON(400, gin.H{"message": err.Error()})
 		c.Abort()
+
 		return
 	}
 
 	c.JSON(201, gin.H{"message": "Please check your email for otp code"})
+}
+
+func (v *VerifyController) VerifyAccount(c *gin.Context) {
+	var data forms.VerifyAccountCommand
+
+	if c.BindJSON(&data) != nil {
+		c.JSON(406, gin.H{"message": "Provide relevant fields"})
+		c.Abort()
+
+		return
+	}
+
+	err := verifyModel.ValidateVerifyCode(data.Email, data.VerifyCode)
+
+	if err != nil {
+		c.JSON(400, gin.H{"message": err.Error()})
+		c.Abort()
+
+		return
+	}
+
+	c.JSON(201, gin.H{"message": "Your email validate successfully"})
 }

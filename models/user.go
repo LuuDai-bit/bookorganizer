@@ -113,3 +113,17 @@ func ValidOldPassword(collection *mongo.Collection, data forms.UpdateUserPasswor
 
 	return CheckPasswordHash(data.Password, user.Password)
 }
+
+func (u *UserModel) VerifyAccount(email string) error {
+	collection := dbConnect.Database(databaseName).Collection("users")
+	filter := bson.D{{Key: "email", Value: email}}
+	update := bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "is_verify", Value: true},
+		}},
+	}
+
+	_, err := collection.UpdateOne(nil, filter, update)
+
+	return err
+}

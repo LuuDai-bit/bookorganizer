@@ -28,6 +28,7 @@ func main() {
 		v1.DELETE("/logout", session.LogOut)
 		v1.PATCH("/users/change_password", user.UpdatePassword)
 		v1.POST("/verify/send", verify.SendVerifyCode)
+		v1.POST("/verify/activate", verify.VerifyAccount)
 	}
 	v1.Use(AuthRequired)
 	{

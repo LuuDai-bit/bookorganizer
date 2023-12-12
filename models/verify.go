@@ -42,6 +42,26 @@ func (v *VerifyModel) SendVerifyCode(email string) error {
 	return err
 }
 
+func (v *VerifyModel) ValidateVerifyCode(email string, verifyCode string) error {
+	collection := dbConnect.Database(databaseName).Collection("verify_code")
+	filter := bson.D{
+		{Key: "email", Value: email},
+		{Key: "verify_code", Value: verifyCode},
+	}
+	var verifyRecord Verify
+	err := collection.FindOne(nil, filter).Decode(&verifyRecord)
+
+	if err != nil {
+		return err
+	}
+
+	userModel := new(UserModel)
+	userModel.VerifyAccount(email)
+	v.deleteAllPreviousVerifyCode(email)
+
+	return err
+}
+
 func (v *VerifyModel) deleteAllPreviousVerifyCode(email string) {
 	collection := dbConnect.Database(databaseName).Collection("verify_code")
 	filter := bson.D{{Key: "email", Value: email}}
