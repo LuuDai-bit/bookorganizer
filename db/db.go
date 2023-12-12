@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -9,11 +10,13 @@ import (
 	// "go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+var server = os.Getenv("DB_URL")
+
 func Connect() *mongo.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// Use env for host and port
-	client, _ := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, _ := mongo.Connect(ctx, options.Client().ApplyURI(server))
 
 	return client
 }
