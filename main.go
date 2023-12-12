@@ -19,6 +19,7 @@ func main() {
 	book := new(controllers.BookController)
 	review := new(controllers.ReviewController)
 	statistic := new(controllers.StatisticController)
+	verify := new(controllers.VerifyController)
 	v1 := router.Group("/api/v1")
 	{
 		v1.GET("/health", health.Status)
@@ -26,6 +27,7 @@ func main() {
 		v1.POST("/signin", session.SignIn)
 		v1.DELETE("/logout", session.LogOut)
 		v1.PATCH("/users/change_password", user.UpdatePassword)
+		v1.POST("/verify/send", verify.SendVerifyCode)
 	}
 	v1.Use(AuthRequired)
 	{

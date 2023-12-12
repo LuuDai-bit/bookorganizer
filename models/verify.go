@@ -1,6 +1,7 @@
 package models
 
 import (
+	"book-organizer/mails"
 	"errors"
 	"io"
 
@@ -32,11 +33,13 @@ func (v *VerifyModel) SendVerifyCode(email string) error {
 		return err
 	}
 
-	// Send email go here
-	// deleteAllPreviousVerifyCode
-	// verifyCode := v.generateVerifyCode(email)
+	v.deleteAllPreviousVerifyCode(email)
+	verifyCode := v.generateVerifyCode(email)
 
-	return nil
+	verifyMail := new(mails.VerifyMail)
+	verifyMail.SendVerifyCode(email, verifyCode)
+
+	return err
 }
 
 func (v *VerifyModel) deleteAllPreviousVerifyCode(email string) {
