@@ -1,5 +1,16 @@
 <template>
   <main>
-    <p>Login</p>
+    <LoginInput></LoginInput>
   </main>
 </template>
+
+<script>
+import LoginInput from "../components/LoginInput.vue";
+
+export default {
+  name: "LoginView",
+  components: {
+    LoginInput,
+  }
+}
+</script>
