@@ -15,7 +15,7 @@ const otpChars = "1234567890"
 
 type Verify struct {
 	Email      string `json:"email" bson:"email"`
-	VerifyCode bool   `json:"verify_code" bson:"verify_code"`
+	VerifyCode string `json:"verify_code" bson:"verify_code"`
 }
 
 type VerifyModel struct{}

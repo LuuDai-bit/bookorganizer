@@ -119,7 +119,7 @@ func (u *UserModel) VerifyAccount(email string) error {
 	filter := bson.D{{Key: "email", Value: email}}
 	update := bson.D{
 		{Key: "$set", Value: bson.D{
-			{Key: "is_verify", Value: true},
+			{Key: "is_verified", Value: true},
 		}},
 	}
 
