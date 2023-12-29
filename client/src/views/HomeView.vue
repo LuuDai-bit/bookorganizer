@@ -220,8 +220,6 @@ export default {
       }
   },
   mounted () {
-      new Chart(document.getElementById('buyers-chart'), this.buyersData)
-      new Chart(document.getElementById('reviews-chart'), this.reviewsData)
   }
 }
 </script>
