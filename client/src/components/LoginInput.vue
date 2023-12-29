@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     onSubmit (email, password) {
-      // call api here
       session_apis.login(email, password);
     },
     validate () {
