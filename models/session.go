@@ -34,7 +34,12 @@ func (s *SessionModel) CreateSession(userID primitive.ObjectID) (string, error) 
 func (s *SessionModel) Destroy(token string) (*mongo.DeleteResult, error) {
 	collection := dbConnect.Database(databaseName).Collection("sessions")
 
-	filter := bson.D{{Key: "token", Value: token}}
+	filter := bson.D{
+		{Key: "token", Value: token},
+		{Key: "expire_time", Value: bson.D{
+			{Key: "$gt", Value: time.Now()},
+		}},
+	}
 	result, err := collection.DeleteOne(nil, filter)
 
 	return result, err
