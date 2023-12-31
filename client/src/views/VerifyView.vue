@@ -17,9 +17,14 @@
       <SubmitButton text="Submit"
                     :disable="disable"
                     @submit="onSubmit(verifyCode)"/>
-      <a class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-800 ml-4" href="#">
+      <a class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-800 ml-4"
+         id="#resendVerifyCode"
+         @click="resendVerifyCode($event)"
+         v-if="waitTime <= 0">
           Resend OTP
       </a>
+      <p class="inline-block align-baseline font-bold text-sm ml-4"
+         v-if="waitTime > 0">Please wait {{ waitTime }}</p>
     </div>
   </form>
 </div>
@@ -55,6 +60,7 @@ export default {
     return {
       verifyCode: null,
       disable: true,
+      waitTime: 0,
     }
   },
   validations: {
@@ -71,6 +77,15 @@ export default {
     onSubmit (verifyCode) {
       session_apis.verify(this.$route.query.email, verifyCode)
     },
+    resendVerifyCode (event) {
+      session_apis.sendCode(this.$route.query.email)
+
+      this.waitTime = 60;
+      let id = setInterval(() => {
+        this.waitTime = this.waitTime - 1
+        if (this.waitTime < 1) clearInterval(id)
+      }, 1000)
+    }
   },
 }
 </script>

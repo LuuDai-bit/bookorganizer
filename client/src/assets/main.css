@@ -33,6 +33,12 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+  color: var(--vt-c-text-dark-2);
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
