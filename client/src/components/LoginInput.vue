@@ -23,17 +23,12 @@
              type="password"
              placeholder="******************"
              v-model="password"
-             @focusout="validate()">
+             @input="validate()">
     </div>
     <div class="flex items-center justify-between">
-      <button class="text-white font-bold py-2 px-4 rounded focus:outline-none"
-              :class="{ 'bg-blue-500 hover:bg-blue-700': !invalid(),
-                        'bg-gray-300 hover:bg-gray-300': invalid() }"
-              type="button"
-              @click="onSubmit(email, password)"
-              :disabled="invalid()">
-        Sign In
-      </button>
+      <SubmitButton text="Sign In"
+                    :disable="disable"
+                    @submit="onSubmit(email, password)"/>
       <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
           @click="redirectToSignup()">
         Signup
@@ -47,16 +42,21 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, email } from "@vuelidate/validators";
 import session_apis from "../api/sessions";
 import router from "../router/index";
+import SubmitButton from "../components/SubmitButton.vue"
 
 export default {
   name: "LoginInput",
   setup() {
     return { v$: useVuelidate() }
   },
+  components: {
+    SubmitButton,
+  },
   data() {
     return {
       email: "",
-      password: null
+      password: null,
+      disable: true,
     }
   },
   validations: {
@@ -72,9 +72,7 @@ export default {
     },
     validate () {
       this.v$.$validate();
-    },
-    invalid () {
-      return (this.v$.email.$invalid || this.v$.password.$invalid);
+      this.disable = this.v$.email.$invalid || this.v$.password.$invalid
     },
     redirectToSignup () {
       router.push({ path: '/signup' });

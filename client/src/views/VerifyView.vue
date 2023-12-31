@@ -66,12 +66,9 @@ export default {
   methods: {
     validate () {
       this.v$.$validate()
-      console.log(this.v$.verifyCode.$invalid);
       this.disable = this.v$.verifyCode.$invalid
     },
     onSubmit (verifyCode) {
-      console.log(this.verifyCode)
-      console.log(verifyCode)
       session_apis.verify(this.$route.query.email, verifyCode)
     },
   },
