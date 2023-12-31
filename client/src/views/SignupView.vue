@@ -15,6 +15,21 @@
       </div>
     </div>
 
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+        Name
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+             id="name"
+             type="name"
+             placeholder="Name"
+             v-model="name"
+             @focusout="validate()">
+      <div class="input-errors" v-for="error of v$.name.$errors" :key="error.$uid">
+        <div class="error-msg">{{ error.$message }}</div>
+      </div>
+    </div>
+
     <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
         Password
@@ -49,9 +64,9 @@
               :class="{ 'bg-blue-500 hover:bg-blue-700': !invalid(),
                         'bg-gray-300 hover:bg-gray-300': invalid() }"
               type="button"
-              @click="onSubmit(email, password)"
+              @click="onSubmit(email, name, password)"
               :disabled="invalid()">
-        Sign In
+        Signup
       </button>
       <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
          @click="redirectToSignin()">
@@ -67,9 +82,9 @@ import { required, email, helpers } from "@vuelidate/validators";
 import session_apis from "../api/sessions";
 import router from "../router/index";
 
-const passwordMustMatch = helpers.withParams(
+const passwordMustMatch = (password) => helpers.withParams(
   { type: 'passwordConfirmation' },
-  (value) => !helpers.req(value) || value == this.password
+  (value) => !helpers.req(value) || value == password
 )
 
 export default {
@@ -80,6 +95,7 @@ export default {
   data() {
     return {
       email: null,
+      name: null,
       password: null,
       passwordConfirmation: null,
     }
@@ -89,6 +105,7 @@ export default {
       required,
       email
     },
+    name: { required},
     password: { required },
     passwordConfirmation: {
       required,
@@ -96,8 +113,8 @@ export default {
     }
   },
   methods: {
-    onSubmit (email, password) {
-      session_apis.login(email, password);
+    onSubmit (email, name, password) {
+      session_apis.signup(email, name, password);
     },
     validate () {
       this.v$.$validate()
@@ -105,6 +122,7 @@ export default {
     invalid () {
       return (
         this.v$.email.$invalid ||
+        this.v$.name.$invalid ||
         this.v$.password.$invalid ||
         this.v$.passwordConfirmation.$invalid
       )

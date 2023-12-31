@@ -15,8 +15,9 @@ const session_apis = {
     });
   },
 
-  async signup(email, password) {
+  async signup(email, name, password) {
     const response = await HTTP.post(`signup`, {
+      name: name,
       email: email,
       password: password,
     }).then(function (response) {
