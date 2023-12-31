@@ -82,9 +82,9 @@ import { required, email, helpers } from "@vuelidate/validators";
 import session_apis from "../api/sessions";
 import router from "../router/index";
 
-const passwordMustMatch = (password) => helpers.withParams(
+const passwordMustMatch = helpers.withParams(
   { type: 'passwordConfirmation' },
-  (value) => !helpers.req(value) || value == password
+  (value, siblings) => !helpers.req(value) || value == siblings.password
 )
 
 export default {
