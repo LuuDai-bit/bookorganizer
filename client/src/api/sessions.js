@@ -12,6 +12,9 @@ const session_apis = {
     }).catch(function (error) {
       // TODO: Do error handler later
       console.log(error)
+      if(error.response.data.needVerify) {
+        router.push({ name: 'verify', query: { email: email } })
+      }
     });
   },
 
@@ -40,6 +43,29 @@ const session_apis = {
     }).finally(function(error) {
       localStorage.removeItem('token')
       router.push({path: '/login'})
+    })
+  },
+
+  async verify(email, verifyCode) {
+    const response = await HTTP.post(`/verify/activate`, {
+      email: email,
+      verifyCode: String(verifyCode),
+    }).then(function (response) {
+      router.push({path: '/login'})
+    }).catch(function(error) {
+      // TODO: Do error handler later
+      console.log(error)
+    })
+  },
+
+  async sendCode(email) {
+    const response = await HTTP.post(`/verify/send`, {
+      email: email,
+    }).then(function (response) {
+      // TODO: Display some message here
+    }).catch(function(error) {
+      // TODO: Do error handler later
+      console.log(error)
     })
   },
 }

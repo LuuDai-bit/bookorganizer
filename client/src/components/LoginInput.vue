@@ -77,7 +77,7 @@ export default {
       return (this.v$.email.$invalid || this.v$.password.$invalid);
     },
     redirectToSignup () {
-      router.push('/signup');
+      router.push({ path: '/signup' });
     },
   }
 }

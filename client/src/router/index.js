@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import Login from '../views/LoginView.vue'
 import Signup from '../views/SignupView.vue'
 import PageNotFound from '../views/PageNotFoundView.vue'
+import Verify from '../views/VerifyView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,12 @@ const router = createRouter({
       component: Signup
     },
     {
+      path: '/verify',
+      name: 'verify',
+      component: Verify,
+      props: true
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue')
@@ -38,7 +45,7 @@ const router = createRouter({
   ]
 })
 
-const authRouteNames = ['login', 'signup']
+const authRouteNames = ['login', 'signup', 'verify']
 
 const isAuthRouteNames = (routeName) => {
   return authRouteNames.includes(routeName)

@@ -105,7 +105,7 @@ export default {
       required,
       email
     },
-    name: { required},
+    name: { required },
     password: { required },
     passwordConfirmation: {
       required,

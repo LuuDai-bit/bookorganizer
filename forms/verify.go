@@ -6,5 +6,5 @@ type SendVerifyCodeCommand struct {
 
 type VerifyAccountCommand struct {
 	Email      string `json:"email" bson:"email" validate:"required"`
-	VerifyCode string `json:"verify_code" bson:"verify_code" validate:"required"`
+	VerifyCode string `json:"verifyCode" bson:"verifyCode" validate:"required"`
 }

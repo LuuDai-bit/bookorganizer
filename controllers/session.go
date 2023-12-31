@@ -25,7 +25,9 @@ func (s *SessionController) SignIn(c *gin.Context) {
 	token, err := userModel.SignIn(data)
 
 	if err != nil {
-		c.JSON(400, gin.H{"message": err.Error()})
+		needVerify := err.Error() == "Email not verify"
+
+		c.JSON(400, gin.H{"message": err.Error(), "needVerify": needVerify})
 		c.Abort()
 		return
 	}
