@@ -25,7 +25,22 @@ const session_apis = {
       // TODO: Do error handler later
       console.log(error)
     })
-  }
+  },
+
+  async logout() {
+    const token = localStorage.getItem('token')
+    const response = await HTTP.delete(`logout`, {
+      headers: {
+        Token: token
+      }
+    }).catch(function(error) {
+      // TODO: Do error handler later
+      console.log(error)
+    }).finally(function(error) {
+      localStorage.removeItem('token')
+      router.push({path: '/login'})
+    })
+  },
 }
 
 export default session_apis;

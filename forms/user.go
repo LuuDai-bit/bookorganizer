@@ -13,10 +13,6 @@ type SignInUserCommand struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type LogOutUserCommand struct {
-	Token string `json:"token" binding:"required"`
-}
-
 type UpdateUserPasswordCommand struct {
 	ID          string `bson:"_id" json:"id"`
 	Password    string `json:"password" bson:"password"`

@@ -17,7 +17,9 @@
 
           <div class="lg:flex justify-between items-center mb-6">
             <p class="text-2xl font-semibold mb-2 lg:mb-0">Good afternoon, Joe!</p>
-            <button class="bg-blue-500 hover:bg-blue-600 focus:outline-none rounded-lg px-6 py-2 text-white font-semibold shadow">View Logs</button>
+            <button class="bg-blue-500 hover:bg-blue-600 focus:outline-none rounded-lg px-6 py-2 text-white font-semibold shadow"
+                    @click="logout()">
+              Logout</button>
           </div>
 
           <div class="flex flex-wrap -mx-3 mb-20">
@@ -139,6 +141,9 @@
 </template>
 
 <script>
+import router from "../router/index";
+import session_apis from "../api/sessions";
+
 export default {
   name: 'DashboardHome',
   data() {
@@ -219,7 +224,10 @@ export default {
           }
       }
   },
-  mounted () {
+  methods: {
+    logout () {
+      session_apis.logout();
+    },
   }
 }
 </script>

@@ -34,16 +34,9 @@ func (s *SessionController) SignIn(c *gin.Context) {
 }
 
 func (s *SessionController) LogOut(c *gin.Context) {
-	var data forms.LogOutUserCommand
+	token := c.GetHeader("Token")
 
-	if c.BindJSON(&data) != nil {
-		c.JSON(406, gin.H{"message": "Provide relevant fields"})
-		c.Abort()
-
-		return
-	}
-
-	result, err := sessionModel.Destroy(data.Token)
+	result, err := sessionModel.Destroy(token)
 
 	if err != nil || result.DeletedCount < 1 {
 		c.JSON(400, gin.H{"message": "Error"})
