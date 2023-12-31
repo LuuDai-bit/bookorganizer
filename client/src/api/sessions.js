@@ -10,8 +10,21 @@ const session_apis = {
       localStorage.setItem('token', response.data.token)
       router.push({ path: '/' })
     }).catch(function (error) {
+      // TODO: Do error handler later
       console.log(error)
     });
+  },
+
+  async signup(email, password) {
+    const response = await HTTP.post(`signup`, {
+      email: email,
+      password: password,
+    }).then(function (response) {
+      router.push({path: '/login'})
+    }).catch(function(error) {
+      // TODO: Do error handler later
+      console.log(error)
+    })
   }
 }
 

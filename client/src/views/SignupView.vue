@@ -1,5 +1,5 @@
 <template>
-  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
         Email
@@ -14,16 +14,35 @@
         <div class="error-msg">{{ error.$message }}</div>
       </div>
     </div>
+
     <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
         Password
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
              id="password"
              type="password"
              placeholder="******************"
              v-model="password"
              @focusout="validate()">
+      <div class="input-errors" v-for="error of v$.password.$errors" :key="error.$uid">
+        <div class="error-msg">{{ error.$message }}</div>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="password_confirmation">
+        Password Confirmation
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+             id="password_confirmation"
+             type="password"
+             placeholder="******************"
+             v-model="passwordConfirmation"
+             @focusout="validate()">
+      <div class="input-errors" v-for="error of v$.passwordConfirmation.$errors" :key="error.$uid">
+        <div class="error-msg">{{ error.$message }}</div>
+      </div>
     </div>
     <div class="flex items-center justify-between">
       <button class="text-white font-bold py-2 px-4 rounded focus:outline-none"
@@ -35,8 +54,8 @@
         Sign In
       </button>
       <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-          @click="redirectToSignup()">
-        Signup
+         @click="redirectToSignin()">
+        Signin
       </a>
     </div>
   </form>
@@ -44,19 +63,25 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core';
-import { required, email } from "@vuelidate/validators";
+import { required, email, helpers } from "@vuelidate/validators";
 import session_apis from "../api/sessions";
 import router from "../router/index";
 
+const passwordMustMatch = helpers.withParams(
+  { type: 'passwordConfirmation' },
+  (value) => !helpers.req(value) || value == this.password
+)
+
 export default {
-  name: "LoginInput",
+  name: "Signup",
   setup() {
     return { v$: useVuelidate() }
   },
   data() {
     return {
-      email: "",
-      password: null
+      email: null,
+      password: null,
+      passwordConfirmation: null,
     }
   },
   validations: {
@@ -65,20 +90,28 @@ export default {
       email
     },
     password: { required },
+    passwordConfirmation: {
+      required,
+      passwordMustMatch: helpers.withMessage('Password not match', passwordMustMatch),
+    }
   },
   methods: {
     onSubmit (email, password) {
       session_apis.login(email, password);
     },
     validate () {
-      this.v$.$validate();
+      this.v$.$validate()
     },
     invalid () {
-      return (this.v$.email.$invalid || this.v$.password.$invalid);
+      return (
+        this.v$.email.$invalid ||
+        this.v$.password.$invalid ||
+        this.v$.passwordConfirmation.$invalid
+      )
     },
-    redirectToSignup () {
-      router.push('/signup');
-    },
+    redirectToSignin () {
+      router.push({ path: '/login' })
+    }
   }
 }
 </script>

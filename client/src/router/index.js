@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/LoginView.vue'
+import Signup from '../views/SignupView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,11 @@ const router = createRouter({
       component: Login
     },
     {
+      path: '/signup',
+      name: 'signup',
+      component: Signup
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue')
@@ -26,12 +32,18 @@ const router = createRouter({
   ]
 })
 
+const authRouteNames = ['login', 'signup']
+
+const isAuthRouteNames = (routeName) => {
+  return authRouteNames.includes(routeName)
+}
+
 router.beforeEach((to, from, next) => {
   let token = localStorage.getItem('token')
-  if(!token && to.name != 'login') {
+  if(!token && !isAuthRouteNames(to.name)) {
     next({ name: 'login' })
   } else {
-    if(to.name == 'login' && token) {
+    if(isAuthRouteNames(to.name) && token) {
       next({ name: 'home' })
     } else {
       next()
