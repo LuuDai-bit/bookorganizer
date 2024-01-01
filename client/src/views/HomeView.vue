@@ -16,7 +16,7 @@
           <!-- breadcrumb end -->
 
           <div class="lg:flex justify-between items-center mb-6">
-            <p class="text-2xl font-semibold mb-2 lg:mb-0">Good afternoon, Joe!</p>
+            <p class="text-2xl font-semibold mb-2 lg:mb-0">Hi, {{ name }}!</p>
             <button class="bg-blue-500 hover:bg-blue-600 focus:outline-none rounded-lg px-6 py-2 text-white font-semibold shadow"
                     @click="logout()">
               Logout</button>
@@ -31,10 +31,9 @@
                 </svg>
 
                 <div class="text-gray-700">
-                  <p class="font-semibold text-3xl">237</p>
-                  <p>Products Sold</p>
+                  <p class="font-semibold text-3xl">{{ numberOfBook }}</p>
+                  <p>Books Read</p>
                 </div>
-
               </div>
             </div>
 
@@ -45,8 +44,8 @@
                 </svg>
 
                 <div class="text-gray-700">
-                  <p class="font-semibold text-3xl">177</p>
-                  <p>Product Reviews</p>
+                  <p class="font-semibold text-3xl">{{ numberOfReview }}</p>
+                  <p>Reviews</p>
                 </div>
               </div>
             </div>
@@ -58,8 +57,8 @@
                 </svg>
 
                 <div class="text-gray-700">
-                  <p class="font-semibold text-3xl">31</p>
-                  <p>New Enquiries</p>
+                  <p class="font-semibold text-3xl">{{ numberOfNewBook }}</p>
+                  <p>New Book</p>
                 </div>
               </div>
             </div>
@@ -71,8 +70,8 @@
                 </svg>
 
                 <div class="text-gray-700">
-                  <p class="font-semibold text-3xl">1,653</p>
-                  <p>Product Views</p>
+                  <p class="font-semibold text-3xl">{{ "" }}</p>
+                  <p>Guess what bitch</p>
                 </div>
 
               </div>
@@ -83,56 +82,15 @@
           <div class="flex flex-wrap -mx-3">
 
             <div class="w-full xl:w-1/3 px-3">
-              <p class="text-xl font-semibold mb-4">Recent Sales</p>
-
-              <div class="w-full bg-white border rounded-lg p-4 mb-8 xl:mb-0">
-                <canvas id="buyers-chart" width="600" height="400"></canvas>
-              </div>
+              <MenuCard name="Settings" source="settings.png" dest="/settings" />
             </div>
 
             <div class="w-full xl:w-1/3 px-3">
-              <p class="text-xl font-semibold mb-4">Recent Reviews</p>
-
-              <div class="w-full bg-white border rounded-lg p-4 mb-8 xl:mb-0">
-                <canvas id="reviews-chart" width="600" height="400"></canvas>
-              </div>
+              <MenuCard name="Books" source="book.png" dest="/books" />
             </div>
 
             <div class="w-full xl:w-1/3 px-3">
-              <p class="text-xl font-semibold mb-4">Recent Transactions</p>
-              <div class="w-full bg-white border rounded-lg p-4">
-                <div class="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
-                    <div>
-                        <p class="font-semibold text-xl">Trent Murphy</p>
-                        <p>Product 1</p>
-                    </div>
-                    <span class="text-green-500 font-semibold text-lg">$25.00</span>
-                </div>
-
-                <div class="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
-                    <div>
-                        <p class="font-semibold text-xl">Joseph Brent</p>
-                        <p>Product 34</p>
-                    </div>
-                    <span class="text-red-500 font-semibold text-lg">$74.99</span>
-                </div>
-
-                <div class="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
-                    <div>
-                        <p class="font-semibold text-xl">Jacob Bator</p>
-                        <p>Product 23</p>
-                    </div>
-                    <span class="text-green-500 font-semibold text-lg">$14.95</span>
-                </div>
-
-                <div class="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2">
-                    <div>
-                        <p class="font-semibold text-xl">Alex Mason</p>
-                        <p>Product 66</p>
-                    </div>
-                    <span class="text-green-500 font-semibold text-lg">$44.99</span>
-                </div>
-              </div>
+              <MenuCard name="???" source="question-mark.png" dest="/???" />
             </div>
 
           </div>
@@ -143,86 +101,20 @@
 <script>
 import router from "../router/index";
 import session_apis from "../api/sessions";
+import MenuCard from "@/components/MenuCard.vue";
 
 export default {
   name: 'DashboardHome',
+  components: {
+    MenuCard,
+  },
   data() {
-      return {
-          buyersData: {
-              type: 'line',
-              data: {
-                  labels : ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-                  datasets:[{
-                      backgroundColor : "rgba(99,179,237,0.4)",
-                      strokeColor : "#63b3ed",
-                      pointColor : "#fff",
-                      pointStrokeColor : "#63b3ed",
-                      data : [203,156,99,251,305,247,256]
-                  },
-                  {
-                      backgroundColor : "rgba(198,198,198,0.4)",
-                      strokeColor : "#f7fafc",
-                      pointColor : "#fff",
-                      pointStrokeColor : "#f7fafc",
-                      data : [86,97,144,114,94,108,156]
-                  }]
-              },
-              options: {
-                  legend: {
-                      display: false
-                  },
-                  scales: {
-                      yAxes: [{
-                          gridLines: {
-                              display:false
-                          },
-                          ticks: {
-                              display: false
-                          }
-                      }],
-                      xAxes: [{
-                          gridLines: {
-                              display: false
-                          }
-                      }]
-                  }
-              }
-          },
-          reviewsData: {
-              type: 'bar',
-              data: {
-                  labels : ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-                  datasets:[{
-                      backgroundColor : "rgba(99,179,237,0.4)",
-                      strokeColor : "#63b3ed",
-                      pointColor : "#fff",
-                      pointStrokeColor : "#63b3ed",
-                      data : [203,156,99,251,305,247,256]
-                  }]
-              },
-              options: {
-                  legend: {
-                      display: false
-                  },
-                  scales: {
-                      yAxes: [{
-                          gridLines: {
-                              display:false
-                          },
-                          ticks: {
-                              display: false
-                          }
-                      }],
-                      xAxes: [{
-                          gridLines: {
-                              display: false
-                          }
-                      }]
-                  }
-              }
-
-          }
-      }
+    return {
+      name: "Stranger",
+      numberOfBook: "199",
+      numberOfReview: "299",
+      numberOfNewBook: "13",
+    }
   },
   methods: {
     logout () {
