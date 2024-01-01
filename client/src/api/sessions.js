@@ -1,5 +1,6 @@
 import HTTP from './http';
-import router from '../router/index'
+import { notifyError, notifySuccess } from './notification';
+import router from '../router/index';
 
 const session_apis = {
   async login(email, password) {
@@ -8,10 +9,10 @@ const session_apis = {
       password: password
     }).then(function (response) {
       localStorage.setItem('token', response.data.token)
+      if(response.data.message) notifySuccess(response.data.message)
       router.push({ path: '/' })
     }).catch(function (error) {
-      // TODO: Do error handler later
-      console.log(error)
+      if(error.response.data.message) notifyError(error.response.data.message)
       if(error.response.data.needVerify) {
         router.push({ name: 'verify', query: { email: email } })
       }
@@ -24,10 +25,10 @@ const session_apis = {
       email: email,
       password: password,
     }).then(function (response) {
+      if(response.data.message) notifySuccess(response.data.message)
       router.push({path: '/login'})
     }).catch(function(error) {
-      // TODO: Do error handler later
-      console.log(error)
+      if(error.response.data.message) notifyError(error.response.data.message)
     })
   },
 
@@ -38,8 +39,7 @@ const session_apis = {
         Token: token
       }
     }).catch(function(error) {
-      // TODO: Do error handler later
-      console.log(error)
+      if(error.response.data.message) notifyError(error.response.data.message)
     }).finally(function(error) {
       localStorage.removeItem('token')
       router.push({path: '/login'})
@@ -53,8 +53,7 @@ const session_apis = {
     }).then(function (response) {
       router.push({path: '/login'})
     }).catch(function(error) {
-      // TODO: Do error handler later
-      console.log(error)
+      if(error.response.data.message) notifyError(error.response.data.message)
     })
   },
 
@@ -62,10 +61,9 @@ const session_apis = {
     const response = await HTTP.post(`/verify/send`, {
       email: email,
     }).then(function (response) {
-      // TODO: Display some message here
+      if(response.data.message) notifySuccess(response.data.message)
     }).catch(function(error) {
-      // TODO: Do error handler later
-      console.log(error)
+      if(error.response.data.message) notifyError(error.response.data.message)
     })
   },
 }
