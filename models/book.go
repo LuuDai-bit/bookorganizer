@@ -48,7 +48,7 @@ func (b *BookModel) CreateBook(userID primitive.ObjectID, book forms.CreateBookC
 
 	collection := dbConnect.Database(databaseName).Collection("books")
 
-	purchaseDate, err := time.Parse(time.DateOnly, book.PurchaseDate)
+	purchaseDate, startReadAt, finishReadAt, err := ConvertBookDateField(book.PurchaseDate, book.StartReadAt, book.FinishReadAt)
 	if err != nil {
 		return err
 	}
@@ -58,8 +58,8 @@ func (b *BookModel) CreateBook(userID primitive.ObjectID, book forms.CreateBookC
 		"name":           book.Name,
 		"author":         book.Author,
 		"purchase_date":  purchaseDate,
-		"start_read_at":  nil,
-		"finish_read_at": nil,
+		"start_read_at":  startReadAt,
+		"finish_read_at": finishReadAt,
 		"categories":     book.Categories,
 	})
 
@@ -75,7 +75,7 @@ func (b *BookModel) UpdateBook(userID primitive.ObjectID, book forms.UpdateBookC
 	collection := dbConnect.Database(databaseName).Collection("books")
 	bookID, _ := primitive.ObjectIDFromHex(book.ID)
 	filter := bson.D{{Key: "user_id", Value: userID}, {Key: "_id", Value: bookID}}
-	purchaseDate, startReadAt, finishReadAt, err := ConvertBookDateField(book)
+	purchaseDate, startReadAt, finishReadAt, err := ConvertBookDateField(book.PurchaseDate, book.StartReadAt, book.FinishReadAt)
 	if err != nil {
 		return err
 	}
@@ -94,20 +94,20 @@ func (b *BookModel) UpdateBook(userID primitive.ObjectID, book forms.UpdateBookC
 	return err
 }
 
-func ConvertBookDateField(book forms.UpdateBookCommand) (time.Time, time.Time, time.Time, error) {
-	purchaseDate, errPD := time.Parse(time.DateOnly, book.PurchaseDate)
-	startReadAt, errSRA := time.Parse(time.DateTime, book.StartReadAt)
-	finishReadAt, errFRA := time.Parse(time.DateTime, book.FinishReadAt)
+func ConvertBookDateField(purchaseDate string, startReadAt string, finishReadAt string) (time.Time, time.Time, time.Time, error) {
+	purchaseDateConveted, errPD := time.Parse(time.DateOnly, purchaseDate)
+	startReadAtConverted, errSRA := time.Parse(time.DateTime, startReadAt)
+	finishReadAtConverted, errFRA := time.Parse(time.DateTime, finishReadAt)
 
 	var err error
 	switch {
-	case book.PurchaseDate != "" && errPD != nil:
+	case purchaseDate != "" && errPD != nil:
 		err = errPD
-	case book.StartReadAt != "" && errSRA != nil:
+	case startReadAt != "" && errSRA != nil:
 		err = errSRA
-	case book.FinishReadAt != "" && errFRA != nil:
+	case finishReadAt != "" && errFRA != nil:
 		err = errFRA
 	}
 
-	return purchaseDate, startReadAt, finishReadAt, err
+	return purchaseDateConveted, startReadAtConverted, finishReadAtConverted, err
 }
