@@ -7,13 +7,13 @@
         <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Author: {{ book.author }}</span>
       </li>
       <li class="flex items-center">
-        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Purchase date: {{ book.purchaseDate }}</span>
+        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Purchase date: {{ formatDate(book.purchase_date) }}</span>
       </li>
       <li class="flex items-center">
-        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Start read at: {{ book.startReadAt || '~' }}</span>
+        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Start read at: {{ formatDate(book.start_read_at) || '~' }}</span>
       </li>
       <li class="flex items-center">
-        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Finish read at: {{ book.startReadAt || '~' }}</span>
+        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Finish read at: {{ formatDate(book.finish_read_at) || '~' }}</span>
       </li>
       <li class="flex items-center">
         <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Categories: {{ book.categories.join(', ') || '~' }}</span>
@@ -24,8 +24,13 @@
 </template>
 
 <script>
+import formatDate from '../mixins/format_date';
+
 export default {
   name: "BookCard",
-  props: ["book"]
+  props: ["book"],
+  methods: {
+    formatDate,
+  }
 }
 </script>

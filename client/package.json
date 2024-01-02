@@ -19,6 +19,7 @@
     "@vuelidate/validators": "^2.0.4",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.3",
+    "dayjs": "^1.11.10",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
     "vue": "^3.3.11",
