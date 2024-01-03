@@ -2,12 +2,14 @@ package models
 
 import (
 	"book-organizer/mails"
+	"context"
 	"errors"
 	"io"
 
 	"crypto/rand"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const MaxLengthCode = 6
@@ -55,9 +57,29 @@ func (v *VerifyModel) ValidateVerifyCode(email string, verifyCode string) error 
 		return err
 	}
 
-	userModel := new(UserModel)
-	userModel.VerifyAccount(email)
-	v.deleteAllPreviousVerifyCode(email)
+	session, session_err := dbConnect.StartSession()
+	if session_err != nil {
+		panic(session_err)
+	}
+	defer session.EndSession(context.TODO())
+
+	if transaction_err := session.StartTransaction(); transaction_err != nil {
+		panic(transaction_err)
+	}
+
+	if err = mongo.WithSession(context.TODO(), session, func(sc mongo.SessionContext) error {
+		userModel := new(UserModel)
+		userModel.VerifyAccount(email)
+		v.deleteAllPreviousVerifyCode(email)
+
+		if err = session.CommitTransaction(sc); err != nil {
+			panic(err)
+		}
+
+		return nil
+	}); err != nil {
+		panic(err)
+	}
 
 	return err
 }
