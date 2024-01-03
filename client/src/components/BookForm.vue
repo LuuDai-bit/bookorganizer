@@ -92,7 +92,17 @@
             <div class="flex-wrap mb-1"
                  v-if="categories.length > 0">
               <span class="inline-block bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300"
-                    v-for="ct in categories">{{ ct }}</span>
+                    v-for="(ct, index) in categories">
+                    {{ ct }}
+                    <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-4 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            @click="removeCategory(index)">
+                      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      </svg>
+                      <span class="sr-only">Remove category</span>
+                    </button>
+              </span>
             </div>
             <div class="flex shadow-sm">
               <input class="shadow appearance-none border rounded w-full py-2 px-3 block text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -198,9 +208,17 @@ export default {
       }
     },
     addCategory(category) {
+      if(!category || this.categories.includes(category)) {
+        notifyError('Empty or duplicate category')
+        return
+      }
+
       this.categories.push(category)
       this.category = ''
-    }
+    },
+    removeCategory(index) {
+      this.categories.splice(index, 1)
+    },
   }
 }
 </script>
