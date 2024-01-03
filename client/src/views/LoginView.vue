@@ -14,3 +14,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+main {
+  margin: auto;
+}
+</style>

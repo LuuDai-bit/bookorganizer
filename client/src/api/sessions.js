@@ -1,3 +1,4 @@
+import axios from 'axios';
 import HTTP from './http';
 import { notifyError, notifySuccess } from './notification';
 import router from '../router/index';

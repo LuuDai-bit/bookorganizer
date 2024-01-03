@@ -4,7 +4,7 @@
 
     <div class="lg:flex justify-between items-center mb-6">
       <p class="text-2xl font-semibold mb-2 lg:mb-0">Welcome to book organizer!</p>
-      <FunctionButton text="Logout" @click="logout()"/>
+      <FunctionButton text="Logout" @click="out()"/>
     </div>
 
     <div class="lg:flex justify-between items-center mb-6">
@@ -31,7 +31,8 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import BookCard from '@/components/BookCard.vue';
 import FunctionButton from '@/components/FunctionButton.vue';
 import BookForm from '@/components/BookForm.vue';
-import bookApis from '../api/books';
+import bookApis from '@/api/books';
+import session_apis from '@/api/sessions';
 
 export default {
   name: "BookView",
@@ -65,6 +66,9 @@ export default {
     },
     closeModal() {
       this.isShow = false;
+    },
+    out() {
+      session_apis.logout()
     }
   }
 }

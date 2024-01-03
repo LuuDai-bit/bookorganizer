@@ -1,5 +1,5 @@
 <template>
-  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 my-auto w-80">
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
         Email
@@ -9,7 +9,7 @@
              type="email"
              placeholder="Email"
              v-model="email"
-             @focusout="validate()">
+             @input="validate()">
       <div class="input-errors" v-for="error of v$.email.$errors" :key="error.$uid">
         <div class="error-msg">{{ error.$message }}</div>
       </div>
