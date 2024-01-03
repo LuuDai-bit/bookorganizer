@@ -10,7 +10,7 @@
         <!-- Modal header -->
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-            Reading a new book?
+            {{ title }}
           </h3>
           <button type="button"
                   class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -133,27 +133,35 @@
 import { useVuelidate } from '@vuelidate/core';
 import { required } from "@vuelidate/validators";
 import bookApis from '@/api/books';
-import { notifyError, notifySuccess } from '../api/notification';
+import { notifyError, notifySuccess } from '@/api/notification';
 import SubmitButton from './SubmitButton.vue';
+import { formatDateWithFormat } from '@/mixins/format_date';
 
 export default {
   name: "BookForm",
   setup() {
     return { v$: useVuelidate() }
   },
+  props: ["book"],
   components: {
     SubmitButton,
   },
   data() {
     return {
-      name: '',
-      author: '',
-      purchaseDate: '',
-      startReadAt: '',
-      finishReadAt: '',
-      categories: [],
+      name: this.book ? this.book.name : '',
+      author: this.book ? this.book.author : '',
+      purchaseDate: this.book ? formatDateWithFormat(this.book.purchase_date, 'YYYY-MM-DD') : '',
+      startReadAt: this.book ? formatDateWithFormat(this.book.start_read_at, 'YYYY-MM-DD') : '',
+      finishReadAt: this.book ? formatDateWithFormat(this.book.finish_read_at, 'YYYY-MM-DD') : '',
+      categories: this.book ? this.book.categories : [],
       category: '',
     }
+  },
+  computed: {
+    title() {
+      let t = this.book ? "Update book?" : "Reading a new book?"
+      return t
+    },
   },
   validations: {
     name: { required },
@@ -169,14 +177,25 @@ export default {
       if (this.v$.name.$invalid || this.v$.author.$invalid || this.v$.purchaseDate.$invalid) return
 
       let self = this
-      bookApis.createBook(name, author, purchaseDate, startReadAt, finishReadAt, categories)
-        .then(function (response) {
-          if(response.data.message) notifySuccess(response.data.message)
-          self.$emit('closeModal')
-          self.$emit('fetchBooks')
-        }).catch(function (error) {
-          if(error.response.data.message) notifyError(error.response.data.message)
-        })
+      if(this.book) {
+        bookApis.updateBook(this.book.id, name, author, purchaseDate, startReadAt, finishReadAt, categories)
+          .then(function (response) {
+            if(response.data.message) notifySuccess(response.data.message)
+            self.$emit('closeModal')
+            self.$emit('fetchBooks')
+          }).catch(function(error) {
+            if(error.response.data.message) notifyError(error.response.data.message)
+          })
+      } else {
+        bookApis.createBook(name, author, purchaseDate, startReadAt, finishReadAt, categories)
+          .then(function (response) {
+            if(response.data.message) notifySuccess(response.data.message)
+            self.$emit('closeModal')
+            self.$emit('fetchBooks')
+          }).catch(function (error) {
+            if(error.response.data.message) notifyError(error.response.data.message)
+          })
+      }
     },
     addCategory(category) {
       this.categories.push(category)

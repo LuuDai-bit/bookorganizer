@@ -8,17 +8,20 @@
     </div>
 
     <div class="lg:flex justify-between items-center mb-6">
-      <FunctionButton text="Create" @click="openModal()"/>
+      <FunctionButton text="Create" @click="openModal(null)"/>
     </div>
 
     <div v-if="books.length === 0">
       <p>No books, it's time to add some</p>
     </div>
     <div v-else>
-      <BookCard v-for="book in books" :book="book"/>
+      <BookCard v-for="book in books"
+                :book="book"
+                @openModal="openModal" />
     </div>
   </div>
   <BookForm v-if="isShow"
+            :book="book"
             @closeModal="closeModal()"
             @fetchBooks="fetchBooks()" />
 </template>
@@ -43,6 +46,7 @@ export default {
       books: [],
       page: 1,
       isShow: false,
+      book: null,
     }
   },
   created() {
@@ -55,7 +59,8 @@ export default {
         self.books = response.data.books || []
       })
     },
-    openModal() {
+    openModal(book) {
+      this.book = book
       this.isShow = true
     },
     closeModal() {
