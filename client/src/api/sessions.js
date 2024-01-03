@@ -1,4 +1,3 @@
-import axios from 'axios';
 import HTTP from './http';
 import { notifyError, notifySuccess } from './notification';
 import router from '../router/index';
@@ -34,14 +33,9 @@ const session_apis = {
   },
 
   async logout() {
-    const token = localStorage.getItem('token')
-    const response = await HTTP.delete(`logout`, {
-      headers: {
-        Token: token
-      }
-    }).catch(function(error) {
+    const response = await HTTP.delete(`logout`).catch(function(error) {
       if(error.response.data.message) notifyError(error.response.data.message)
-    }).finally(function(error) {
+    }).finally(function() {
       localStorage.removeItem('token')
       router.push({path: '/login'})
     })
