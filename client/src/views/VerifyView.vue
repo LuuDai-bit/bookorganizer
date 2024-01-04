@@ -1,5 +1,5 @@
 <template>
-<div class="max-w-md mx-auto border max-w-sm mt-20 rounded">
+<div class="max-w-md mx-auto max-w-sm mt-20 rounded">
   <form class="shadow-md px-4 py-6">
     <span>Please check email for verify code!</span>
     <br/><br/>

@@ -7,8 +7,8 @@
 
 
 #app {
-  max-width: 1280px;
-  min-width: 50vw;
+  max-width: 70vw;
+  min-width: 70vw;
   margin: 0 auto;
 
   padding: 2rem;

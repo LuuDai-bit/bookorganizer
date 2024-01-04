@@ -134,3 +134,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+form {
+  margin: auto;
+  min-width: 20vw;
+}
+</style>
