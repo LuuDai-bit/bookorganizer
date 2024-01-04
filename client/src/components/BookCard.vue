@@ -34,7 +34,6 @@ export default {
   methods: {
     formatDate,
     openModal(book) {
-      console.log(book)
       this.$emit("openModal", book)
     }
   }

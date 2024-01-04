@@ -19,6 +19,11 @@
                 :book="book"
                 @openModal="openModal" />
     </div>
+
+    <Pagination :currentPage="page"
+                :total="total"
+                :perPage="perPage"
+                @goToPage="goToPage" />
   </div>
   <BookForm v-if="isShow"
             :book="book"
@@ -31,6 +36,7 @@ import Breadcrumb from '@/components/Breadcrumb.vue';
 import BookCard from '@/components/BookCard.vue';
 import FunctionButton from '@/components/FunctionButton.vue';
 import BookForm from '@/components/BookForm.vue';
+import Pagination from '@/components/Pagination.vue';
 import bookApis from '@/api/books';
 import session_apis from '@/api/sessions';
 
@@ -41,6 +47,7 @@ export default {
     BookCard,
     FunctionButton,
     BookForm,
+    Pagination,
   },
   data() {
     return {
@@ -48,6 +55,8 @@ export default {
       page: 1,
       isShow: false,
       book: null,
+      total: 0,
+      perPage: 20,
     }
   },
   created() {
@@ -58,6 +67,7 @@ export default {
       let self = this
       bookApis.getBooks(this.page).then(function (response) {
         self.books = response.data.books || []
+        self.total = response.data.total
       })
     },
     openModal(book) {
@@ -69,6 +79,10 @@ export default {
     },
     out() {
       session_apis.logout()
+    },
+    goToPage(page) {
+      this.page = page
+      this.fetchBooks()
     }
   }
 }

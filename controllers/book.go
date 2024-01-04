@@ -23,8 +23,9 @@ func (b *BookController) GetBooks(c *gin.Context) {
 
 	user := currentUser(c)
 	books := bookModel.GetBooksByUser(user.ID, page)
+	total := bookModel.GetTotalBookByUser(user.ID)
 
-	c.JSON(200, gin.H{"message": "Success", "books": books})
+	c.JSON(200, gin.H{"message": "Success", "books": books, "total": total})
 }
 
 func (b *BookController) CreateBook(c *gin.Context) {

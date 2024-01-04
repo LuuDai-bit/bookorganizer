@@ -2,6 +2,7 @@ package models
 
 import (
 	"book-organizer/forms"
+	"context"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -27,7 +28,10 @@ func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int) []Book {
 	collection := dbConnect.Database(databaseName).Collection("books")
 	filter := bson.D{{Key: "$match", Value: bson.D{{Key: "user_id", Value: userID}}}}
 	sort := bson.D{{Key: "$sort", Value: bson.D{{Key: "purchase_date", Value: -1}}}}
-	cursor, err := collection.Aggregate(nil, mongo.Pipeline{filter, sort})
+	skip := bson.D{{Key: "$skip", Value: (page - 1) * 20}}
+	limit := bson.D{{Key: "$limit", Value: 20}}
+
+	cursor, err := collection.Aggregate(nil, mongo.Pipeline{filter, sort, skip, limit})
 	if err != nil {
 		panic(err)
 	}
@@ -38,6 +42,17 @@ func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int) []Book {
 	}
 
 	return books
+}
+
+func (b *BookModel) GetTotalBookByUser(userID primitive.ObjectID) int64 {
+	collection := dbConnect.Database(databaseName).Collection("books")
+	filter := bson.D{{Key: "user_id", Value: userID}}
+	total, err := collection.CountDocuments(context.TODO(), filter)
+	if err != nil {
+		panic(err)
+	}
+
+	return total
 }
 
 func (b *BookModel) CreateBook(userID primitive.ObjectID, book forms.CreateBookCommand) error {
