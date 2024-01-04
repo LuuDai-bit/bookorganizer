@@ -11,7 +11,7 @@ import (
 
 type Review struct {
 	ID      primitive.ObjectID `json:"id" bson:"_id"`
-	Point   int                `json:"point" bson:"point"`
+	Point   float32            `json:"point" bson:"point"`
 	Comment string             `json:"comment" bson:"comment"`
 }
 

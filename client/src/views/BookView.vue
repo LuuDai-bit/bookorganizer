@@ -17,7 +17,8 @@
     <div v-else>
       <BookCard v-for="book in books"
                 :book="book"
-                @openModal="openModal" />
+                @openModal="openModal"
+                @openReviewModal="openReviewModal" />
     </div>
 
     <Pagination :currentPage="page"
@@ -29,6 +30,9 @@
             :book="book"
             @closeModal="closeModal()"
             @fetchBooks="fetchBooks()" />
+  <ReviewForm v-if="isReview"
+              :book="book"
+              @closeModal="closeModal('review')" />
 </template>
 
 <script>
@@ -37,6 +41,7 @@ import BookCard from '@/components/BookCard.vue';
 import FunctionButton from '@/components/FunctionButton.vue';
 import BookForm from '@/components/BookForm.vue';
 import Pagination from '@/components/Pagination.vue';
+import ReviewForm from '@/components/ReviewForm.vue';
 import bookApis from '@/api/books';
 import session_apis from '@/api/sessions';
 
@@ -48,12 +53,14 @@ export default {
     FunctionButton,
     BookForm,
     Pagination,
+    ReviewForm,
   },
   data() {
     return {
       books: [],
       page: 1,
       isShow: false,
+      isReview: false,
       book: null,
       total: 0,
       perPage: 20,
@@ -74,8 +81,16 @@ export default {
       this.book = book
       this.isShow = true
     },
-    closeModal() {
-      this.isShow = false;
+    openReviewModal(book) {
+      this.book = book
+      this.isReview = true
+    },
+    closeModal(type) {
+      if(type == 'review') {
+        this.isReview = false;
+      } else {
+        this.isShow = false;
+      }
     },
     out() {
       session_apis.logout()
