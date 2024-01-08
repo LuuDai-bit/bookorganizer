@@ -22,7 +22,7 @@
       </div>
 
       <div v-for="review in book.reviews">
-        <div class="flex flex-col gap-3 mt-14">
+        <div class="flex flex-col gap-3 mt-5">
           <ReviewItem :book="book" :review="review" />
         </div>
       </div>
@@ -77,7 +77,6 @@ export default {
       let self = this;
       bookApis.getBooks(this.page).then(function (response) {
         self.books = response.data.books || [];
-        // self.books = response.data.books.filter((book) => book.reviews)
         self.total = response.data.total;
       });
     },
