@@ -144,7 +144,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { required } from "@vuelidate/validators";
 import bookApis from '@/api/books';
 import { notifyError, notifySuccess } from '@/api/notification';
-import SubmitButton from './SubmitButton.vue';
+import SubmitButton from '@/components/common/SubmitButton.vue';
 import { formatDateWithFormat } from '@/mixins/format_date';
 
 export default {

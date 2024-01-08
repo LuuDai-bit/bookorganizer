@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import formatDate from '../mixins/format_date';
+import formatDate from '@/mixins/format_date';
 
 export default {
   name: "BookCard",

@@ -36,11 +36,11 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb.vue';
-import BookCard from '@/components/BookCard.vue';
-import FunctionButton from '@/components/FunctionButton.vue';
-import BookForm from '@/components/BookForm.vue';
-import Pagination from '@/components/Pagination.vue';
+import Breadcrumb from '@/components/common/Breadcrumb.vue';
+import BookCard from '@/components/books/BookCard.vue';
+import FunctionButton from '@/components/common/FunctionButton.vue';
+import BookForm from '@/components/books/BookForm.vue';
+import Pagination from '@/components/common/Pagination.vue';
 import ReviewForm from '@/components/ReviewForm.vue';
 import bookApis from '@/api/books';
 import session_apis from '@/api/sessions';

@@ -35,7 +35,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, helpers } from "@vuelidate/validators";
 import session_apis from "../api/sessions";
 import router from "../router/index";
-import SubmitButton from "../components/SubmitButton.vue";
+import SubmitButton from '@/components/common/SubmitButton.vue';
 
 const mustContainOnlyNumber = helpers.withParams(
   { type: "verifyCode" },

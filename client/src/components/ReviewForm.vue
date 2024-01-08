@@ -52,7 +52,7 @@
 
 <script>
 import Vue3StarRatings from "vue3-star-ratings";
-import SubmitButton from "./SubmitButton.vue";
+import SubmitButton from "./common/SubmitButton.vue";
 import reviewApis from "@/api/reviews";
 import { notifyError, notifySuccess } from "@/api/notification";
 

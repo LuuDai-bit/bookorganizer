@@ -83,19 +83,22 @@
 
     </div>
 
+
   </div>
 </template>
 
 <script>
 import session_apis from "../api/sessions";
 import MenuCard from "@/components/MenuCard.vue";
-import Breadcrumb from '@/components/Breadcrumb.vue';
+import Breadcrumb from '@/components/common/Breadcrumb.vue';
+import Footer from "@/components/common/Footer.vue";
 
 export default {
   name: 'DashboardHome',
   components: {
     MenuCard,
     Breadcrumb,
+    Footer,
   },
   data() {
     return {
