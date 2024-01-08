@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LoginInput from "../components/LoginInput.vue";
+import LoginInput from '@/components/login/LoginInput.vue';
 
 export default {
   name: "LoginView",

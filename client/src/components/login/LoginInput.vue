@@ -40,9 +40,9 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { required, email } from "@vuelidate/validators";
-import session_apis from "../api/sessions";
-import router from "../router/index";
-import SubmitButton from './common/SubmitButton.vue';
+import session_apis from '@/api/sessions';
+import router from "@/router/index";
+import SubmitButton from '../common/SubmitButton.vue';
 
 export default {
   name: "LoginInput",

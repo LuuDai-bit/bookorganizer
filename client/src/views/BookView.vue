@@ -41,7 +41,7 @@ import BookCard from '@/components/books/BookCard.vue';
 import FunctionButton from '@/components/common/FunctionButton.vue';
 import BookForm from '@/components/books/BookForm.vue';
 import Pagination from '@/components/common/Pagination.vue';
-import ReviewForm from '@/components/ReviewForm.vue';
+import ReviewForm from '@/components/reviews/ReviewForm.vue';
 import bookApis from '@/api/books';
 import session_apis from '@/api/sessions';
 
