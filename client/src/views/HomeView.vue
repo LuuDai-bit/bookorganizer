@@ -78,7 +78,7 @@
       </div>
 
       <div class="w-full xl:w-1/3 px-3">
-        <MenuCard name="???" source="question-mark.png" dest="/???" />
+        <MenuCard name="Reviews" source="question-mark.png" dest="/reviews" />
       </div>
 
     </div>
