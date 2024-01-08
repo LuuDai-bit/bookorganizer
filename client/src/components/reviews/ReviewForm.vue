@@ -79,6 +79,7 @@ export default {
         .then(function(response) {
           self.closeModal()
           if(response.data.message) notifySuccess(response.data.message)
+          self.$emit(`fetchBooks`)
         }).catch(function(error) {
           if(error.response.data.message) notifyError(error.response.data.message)
         })

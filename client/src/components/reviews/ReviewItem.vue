@@ -4,7 +4,6 @@
     <div class="flex justify justify-between">
       <div class="flex gap-2">
         <div class="w-7 h-7 text-center rounded-full bg-red-500">B</div>
-        <span>{{ book.name }}</span>
       </div>
       <div class="flex p-1 gap-1 text-orange-300">
         <span>{{ review.point }}</span>
