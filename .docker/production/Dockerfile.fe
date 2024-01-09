@@ -1,0 +1,17 @@
+FROM node:lts-alpine
+
+RUN npm install -g http-server
+
+RUN mkdir client
+WORKDIR client
+
+COPY /client/package*.json /client/
+
+RUN npm install
+
+COPY ./client .
+
+RUN npm run build
+
+EXPOSE 8080
+CMD [ "http-server", "dist" ]

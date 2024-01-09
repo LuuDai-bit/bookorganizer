@@ -1,17 +1,29 @@
 version: "3"
 services:
-  app:
-    container_name: book_organizer
+  app_be:
+    container_name: book_organizer_prd
     build:
       context: .
-      dockerfile: ./.docker/development/Dockerfile
+      dockerfile: ./.docker/production/Dockerfile
     command: bash -c "go run main.go"
     volumes:
       - .:/book-organizer
     ports:
-      - "3000:3000"
+      - 3001:3000
     depends_on:
       - mongo
+    networks:
+      - internal
+
+  app_fe:
+    container_name: bo_client_prd
+    build:
+      context: .
+      dockerfile: ./.docker/production/Dockerfile.fe
+    volumes:
+      - ./client:/client
+    ports:
+      - 5173:8080
     networks:
       - internal
 
@@ -20,7 +32,7 @@ services:
     image: mongo
     restart: always
     ports:
-      - 27018:27017
+      - 27017:27017
     env_file:
       - .env.docker
     networks:
