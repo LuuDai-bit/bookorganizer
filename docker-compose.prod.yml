@@ -13,7 +13,7 @@ services:
     depends_on:
       - mongo
     networks:
-      - internal
+      - blog_internal
 
   app_fe:
     container_name: bo_client_prd
@@ -25,7 +25,7 @@ services:
     ports:
       - 5173:8080
     networks:
-      - internal
+      - blog_internal
 
   mongo:
     container_name: book_organizer_db
@@ -36,8 +36,8 @@ services:
     env_file:
       - .env.docker
     networks:
-      - internal
+      - blog_internal
 
 networks:
-  internal:
-    driver: bridge
+  blog_internal:
+    external: true
