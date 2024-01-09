@@ -20,8 +20,6 @@ services:
     build:
       context: .
       dockerfile: ./.docker/production/Dockerfile.fe
-    volumes:
-      - ./client:/client
     ports:
       - 5173:8080
     networks:
