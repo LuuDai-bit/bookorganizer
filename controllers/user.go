@@ -24,7 +24,7 @@ func (u *UserController) Signup(c *gin.Context) {
 	err := userModel.Signup(data)
 
 	if err != nil {
-		c.JSON(400, gin.H{"message": err.Error()})
+		c.JSON(400, gin.H{"message": "Sign up failed"})
 		c.Abort()
 		return
 	}
@@ -45,7 +45,7 @@ func (u *UserController) UpdatePassword(c *gin.Context) {
 	err := userModel.UpdatePassword(data)
 
 	if err != nil {
-		c.JSON(400, gin.H{"message": err.Error()})
+		c.JSON(400, gin.H{"message": "Update password failed"})
 		c.Abort()
 		return
 	}

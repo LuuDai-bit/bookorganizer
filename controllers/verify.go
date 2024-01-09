@@ -24,7 +24,7 @@ func (v *VerifyController) SendVerifyCode(c *gin.Context) {
 	err := verifyModel.SendVerifyCode(data.Email)
 
 	if err != nil {
-		c.JSON(400, gin.H{"message": err.Error()})
+		c.JSON(400, gin.H{"message": "Send verify code failed"})
 		c.Abort()
 
 		return
@@ -46,7 +46,7 @@ func (v *VerifyController) VerifyAccount(c *gin.Context) {
 	err := verifyModel.ValidateVerifyCode(data.Email, data.VerifyCode)
 
 	if err != nil {
-		c.JSON(400, gin.H{"message": err.Error()})
+		c.JSON(400, gin.H{"message": "Verify account failed"})
 		c.Abort()
 
 		return
