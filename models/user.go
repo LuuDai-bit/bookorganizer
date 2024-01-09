@@ -47,9 +47,7 @@ func (u *UserModel) SignIn(data forms.SignInUserCommand) (string, error) {
 	err := collection.FindOne(context.TODO(), filter).Decode(&user)
 
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return "", err
-		}
+		return "", err
 	}
 
 	if !user.IsVerified {
