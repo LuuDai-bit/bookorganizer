@@ -16,5 +16,5 @@ type SignInUserCommand struct {
 type UpdateUserPasswordCommand struct {
 	ID          string `bson:"_id" json:"id"`
 	Password    string `json:"password" bson:"password"`
-	NewPassword string `json:"new_password" bson:"new_password"`
+	NewPassword string `json:"newPassword" bson:"newPassword"`
 }

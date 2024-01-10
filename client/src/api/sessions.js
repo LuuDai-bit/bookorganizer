@@ -34,7 +34,7 @@ const session_apis = {
 
   async logout() {
     const response = await HTTP.delete(`logout`).catch(function(error) {
-      if(error.response.data.message) notifyError(error.response.data.message)
+      // if(error.response.data.message) notifyError(error.response.data.message)
     }).finally(function() {
       localStorage.removeItem('token')
       router.push({path: '/login'})

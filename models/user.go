@@ -14,8 +14,8 @@ type User struct {
 	ID         primitive.ObjectID `bson:"_id" json:"id"`
 	Name       string             `json:"name" bson:"name"`
 	Email      string             `json:"email" bson:"email"`
-	Password   string             `json:"password" bson:"password"`
-	IsVerified bool               `json:"is_verified" bson:"is_verified"`
+	Password   string             `json:"-" bson:"password"`
+	IsVerified bool               `json:"-" bson:"is_verified"`
 }
 
 type UserModel struct{}
@@ -76,8 +76,8 @@ func (u *UserModel) UpdatePassword(data forms.UpdateUserPasswordCommand) error {
 		return errors.New("Password Incorrect")
 	}
 
-	new_password, _ := HashPassword(data.NewPassword)
-	update := bson.D{{Key: "$set", Value: bson.D{{Key: "password", Value: new_password}}}}
+	newPassword, _ := HashPassword(data.NewPassword)
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "password", Value: newPassword}}}}
 
 	_, err := collection.UpdateOne(nil, filter, update)
 

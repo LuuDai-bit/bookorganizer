@@ -6,6 +6,7 @@ import PageNotFound from '../views/PageNotFoundView.vue'
 import Verify from '../views/VerifyView.vue'
 import Book from '../views/BookView.vue'
 import Review from '../views/ReviewView.vue'
+import Setting from '../views/SettingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_DEFAULT_PATH),
@@ -48,6 +49,11 @@ const router = createRouter({
       path: '/reviews',
       name: 'reviews',
       component: Review,
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Setting,
     },
     {
       path: '/:pathMatch(.*)',

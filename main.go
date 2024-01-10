@@ -45,13 +45,13 @@ func setupRouter() *gin.Engine {
 		v1.POST("/signup", user.Signup)
 		v1.POST("/signin", session.SignIn)
 		v1.DELETE("/logout", session.LogOut)
-		v1.PATCH("/users/change_password", user.UpdatePassword)
 		v1.POST("/verify/send", verify.SendVerifyCode)
 		v1.POST("/verify/activate", verify.VerifyAccount)
 	}
 	v1.Use(AuthRequired)
 	{
 		v1.GET("/users/me", user.ShowDetail)
+		v1.PATCH("/users/change_password", user.UpdatePassword)
 		v1.GET("/books/:page", book.GetBooks)
 		v1.POST("/books/create", book.CreateBook)
 		v1.PATCH("/books/update", book.UpdateBook)
