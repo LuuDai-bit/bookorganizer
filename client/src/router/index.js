@@ -8,7 +8,7 @@ import Book from '../views/BookView.vue'
 import Review from '../views/ReviewView.vue'
 
 const router = createRouter({
-  history: createWebHistory('/bo/'),
+  history: createWebHistory(import.meta.env.VITE_DEFAULT_PATH),
   routes: [
     {
       path: '/',
