@@ -1,17 +1,21 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
-  base: import.meta.env.VITE_DEFAULT_PATH
-})
+export default ({ mode }) => {
+  process.env = {...process.env, ...loadEnv(mode, process.cwd())};
+
+  return defineConfig({
+    plugins: [
+      vue(),
+    ],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    },
+    base: process.env.VITE_DEFAULT_PATH
+  });
+}
