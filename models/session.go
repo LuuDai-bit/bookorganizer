@@ -11,7 +11,7 @@ import (
 )
 
 type Session struct {
-	ExpireTime primitive.DateTime `bson:"expire_time"`
+	ExpireTime primitive.DateTime `json:"-" bson:"expire_time"`
 	Token      string             `json:"token" bson:"token"`
 	UserID     primitive.ObjectID `json:"user_id" bson:"user_id"`
 }

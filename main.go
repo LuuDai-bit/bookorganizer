@@ -3,11 +3,12 @@ package main
 import (
 	"book-organizer/controllers"
 	"book-organizer/models"
-	"net/http"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func main() {
@@ -65,13 +66,15 @@ func setupRouter() *gin.Engine {
 }
 
 func AuthRequired(c *gin.Context) {
-	token := c.GetHeader("Token")
 	sessionModel := new(models.SessionModel)
-	_, err := sessionModel.FindOne(token)
+	userModel := new(models.UserModel)
 
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
+	token := c.GetHeader("Token")
+	session, _ := sessionModel.FindOne(token)
+	_, err := userModel.FindOne(session.UserID)
+
+	currentTime := primitive.NewDateTimeFromTime(time.Now())
+	if err != nil || session.ExpireTime < currentTime {
+		c.AbortWithStatusJSON(401, gin.H{"error": "Unauthorized"})
 	}
-	c.Next()
 }

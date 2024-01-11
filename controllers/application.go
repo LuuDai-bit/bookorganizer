@@ -12,10 +12,8 @@ func currentUser(c *gin.Context) models.User {
 	user, err := userModel.FindOne(session.UserID)
 
 	if err != nil {
-		c.AbortWithStatusJSON(404, gin.H{
-			"error":        "User not found",
-			"invalidToken": true,
-		})
+		c.AbortWithStatusJSON(404, gin.H{"error": "Unauthorized"})
+
 		return user
 	}
 
