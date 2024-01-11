@@ -4,7 +4,7 @@
 
     <div class="lg:flex justify-between items-center mb-6">
       <p class="text-2xl font-semibold mb-2 lg:mb-0">Do it your style!</p>
-      <FunctionButton text="Logout" @click="out()"/>
+      <FunctionButton text="Logout" @clickHandler="out()"/>
     </div>
 
     <br>
@@ -53,6 +53,7 @@ import Breadcrumb from '@/components/common/Breadcrumb.vue';
 import FunctionButton from '@/components/common/FunctionButton.vue';
 import ChangePassWordForm from '@/components/settings/ChangePasswordForm.vue';
 import userApis from '@/api/users';
+import session_apis from '@/api/sessions';
 
 export default {
   name: "SettingView",

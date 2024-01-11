@@ -4,11 +4,11 @@
 
     <div class="lg:flex justify-between items-center mb-6">
       <p class="text-2xl font-semibold mb-2 lg:mb-0">Welcome to book organizer!</p>
-      <FunctionButton text="Logout" @click="out()"/>
+      <FunctionButton text="Logout" @clickHandler="out()"/>
     </div>
 
     <div class="lg:flex justify-between items-center mb-6">
-      <FunctionButton text="Create" @click="openModal(null)"/>
+      <FunctionButton text="Create" @clickHandler="openModal(null)"/>
     </div>
 
     <div v-if="books.length === 0">

@@ -4,7 +4,7 @@
 
     <div class="lg:flex justify-between items-center mb-6">
       <p class="text-2xl font-semibold mb-2 lg:mb-0">Welcome to book reviews!</p>
-      <FunctionButton text="Logout" @click="out()"/>
+      <FunctionButton text="Logout" @clickHandler="out()"/>
     </div>
 
     <div v-for="book in books">
@@ -18,7 +18,7 @@
           {{ book.name }}
         </h3>
         <FunctionButton text="Add Review"
-                        @click="openReviewModal(book)"/>
+                        @clickHandler="openReviewModal(book)"/>
       </div>
 
       <div v-for="review in book.reviews">

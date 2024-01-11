@@ -10,7 +10,7 @@
     props: ["text"],
     methods: {
       clickHandler () {
-        this.$emit('click')
+        this.$emit('clickHandler')
       }
     }
   }
