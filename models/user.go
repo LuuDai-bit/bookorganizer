@@ -79,7 +79,30 @@ func (u *UserModel) UpdatePassword(data forms.UpdateUserPasswordCommand) error {
 	newPassword, _ := HashPassword(data.NewPassword)
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "password", Value: newPassword}}}}
 
-	_, err := collection.UpdateOne(nil, filter, update)
+	session, session_err := dbConnect.StartSession()
+	if session_err != nil {
+		panic(session_err)
+	}
+	defer session.EndSession(context.TODO())
+
+	if transaction_err := session.StartTransaction(); transaction_err != nil {
+		panic(transaction_err)
+	}
+
+	var err error
+	if err = mongo.WithSession(context.TODO(), session, func(sc mongo.SessionContext) error {
+		_, err := collection.UpdateOne(nil, filter, update)
+		sessionModel := new(SessionModel)
+		sessionModel.DeleteAllUserSession(id)
+
+		if err = session.CommitTransaction(sc); err != nil {
+			panic(err)
+		}
+
+		return nil
+	}); err != nil {
+		panic(err)
+	}
 
 	return err
 }

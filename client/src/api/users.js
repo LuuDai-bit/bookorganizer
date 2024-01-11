@@ -1,7 +1,6 @@
 import HTTP from './http';
-import session_apis from './sessions';
 import { notifyError } from './notification';
-
+import router from '../router/index';
 
 const userApis = {
   async getMyInfo() {
@@ -16,7 +15,8 @@ const userApis = {
       password: password,
       newPassword: newPassword,
     }).then(function(response) {
-      session_apis.logout();
+      localStorage.removeItem('token')
+      router.push({path: '/login'})
     }).catch(function(error) {
       if(error.response.data.message) notifyError(error.response.data.message)
     })
