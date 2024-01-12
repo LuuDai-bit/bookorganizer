@@ -31,6 +31,7 @@ func setupRouter() *gin.Engine {
 	review := new(controllers.ReviewController)
 	statistic := new(controllers.StatisticController)
 	verify := new(controllers.VerifyController)
+	file := new(controllers.FileController)
 	router.Use(
 		cors.New(cors.Config{
 			AllowOrigins:     []string{"*"},
@@ -48,6 +49,9 @@ func setupRouter() *gin.Engine {
 		v1.DELETE("/logout", session.LogOut)
 		v1.POST("/verify/send", verify.SendVerifyCode)
 		v1.POST("/verify/activate", verify.VerifyAccount)
+
+		// TODO: move it to auth require block after test
+		v1.POST("/file/single", file.UploadSingleFile)
 	}
 	v1.Use(AuthRequired)
 	{
