@@ -58,3 +58,17 @@ func (u *UserController) ShowDetail(c *gin.Context) {
 
 	c.JSON(200, gin.H{"message": "Success", "user": user})
 }
+
+func (u *UserController) UpdateAvatar(c *gin.Context) {
+	var data forms.UpdateAvatarCommand
+
+	if c.BindJSON(&data) != nil {
+		c.JSON(406, gin.H{"message": "Provide relevant fields"})
+		c.Abort()
+
+		return
+	}
+
+	currentUser := currentUser(c)
+	userModel.UpdateAvatar(data, currentUser.ID)
+}

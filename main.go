@@ -49,14 +49,12 @@ func setupRouter() *gin.Engine {
 		v1.DELETE("/logout", session.LogOut)
 		v1.POST("/verify/send", verify.SendVerifyCode)
 		v1.POST("/verify/activate", verify.VerifyAccount)
-
-		// TODO: move it to auth require block after test
-		v1.POST("/file/single", file.UploadSingleFile)
 	}
 	v1.Use(new(middlewares.AuthMiddleware).AuthRequired)
 	{
 		v1.GET("/users/me", user.ShowDetail)
 		v1.PATCH("/users/change_password", user.UpdatePassword)
+		v1.PATCH("/users/change_avatar", user.UpdateAvatar)
 		v1.GET("/books/:page", book.GetBooks)
 		v1.POST("/books/create", book.CreateBook)
 		v1.PATCH("/books/update", book.UpdateBook)
@@ -64,6 +62,7 @@ func setupRouter() *gin.Engine {
 		v1.PATCH("/reviews/update", review.UpdateReview)
 		v1.GET("/statistic/books/read/:year", statistic.CountBook)
 		v1.GET("/statistic/categories/favorite", statistic.GetFavoriteCateogries)
+		v1.POST("/file/single", file.UploadSingleFile)
 	}
 
 	return router

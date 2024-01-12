@@ -18,3 +18,7 @@ type UpdateUserPasswordCommand struct {
 	Password    string `json:"password" bson:"password"`
 	NewPassword string `json:"newPassword" bson:"newPassword"`
 }
+
+type UpdateAvatarCommand struct {
+	Key string `bson:"key" json:"key"`
+}

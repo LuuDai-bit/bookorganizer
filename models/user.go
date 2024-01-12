@@ -16,6 +16,7 @@ type User struct {
 	Email      string             `json:"email" bson:"email"`
 	Password   string             `json:"-" bson:"password"`
 	IsVerified bool               `json:"-" bson:"is_verified"`
+	AvatarKey  string             `json:"avatar_key" bson:"avatar_key"`
 }
 
 type UserModel struct{}
@@ -103,6 +104,15 @@ func (u *UserModel) UpdatePassword(data forms.UpdateUserPasswordCommand) error {
 	}); err != nil {
 		panic(err)
 	}
+
+	return err
+}
+
+func (u *UserModel) UpdateAvatar(data forms.UpdateAvatarCommand, id primitive.ObjectID) error {
+	collection := dbConnect.Database(databaseName).Collection("users")
+	filter := bson.D{{Key: "_id", Value: id}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "avatar_key", Value: data.Key}}}}
+	_, err := collection.UpdateOne(nil, filter, update)
 
 	return err
 }
