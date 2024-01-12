@@ -4,6 +4,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -11,7 +12,10 @@ import (
 	"github.com/google/uuid"
 )
 
-const MB = 1 << 20
+const (
+	MB                = 1 << 20
+	PresignURLTimeout = 15 // minutes
+)
 
 type S3Handler struct{}
 
@@ -21,7 +25,7 @@ func (s *S3Handler) S3Instance() *session.Session {
 	})
 
 	if err != nil {
-		// handle
+		panic(err)
 	}
 
 	return session
@@ -58,4 +62,21 @@ func (s *S3Handler) UploadFile(fileHeader *multipart.FileHeader) (string, error)
 	})
 
 	return key, err
+}
+
+func (s *S3Handler) GeneratePresignUrl(key string) string {
+	session := s.S3Instance()
+
+	req, _ := s3.New(session).GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(os.Getenv("AWS_S3_BUCKET")),
+		Key:    aws.String(key),
+	})
+
+	urlStr, err := req.Presign(PresignURLTimeout * time.Minute)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return urlStr
 }

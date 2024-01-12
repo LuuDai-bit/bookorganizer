@@ -3,6 +3,7 @@ package controllers
 import (
 	"book-organizer/forms"
 	"book-organizer/models"
+	"book-organizer/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -56,6 +57,11 @@ func (u *UserController) UpdatePassword(c *gin.Context) {
 func (u *UserController) ShowDetail(c *gin.Context) {
 	user := currentUser(c)
 
+	if user.AvatarKey != "" {
+		s3Handler := new(services.S3Handler)
+		user.AvatarUrl = s3Handler.GeneratePresignUrl(user.AvatarKey)
+	}
+
 	c.JSON(200, gin.H{"message": "Success", "user": user})
 }
 
@@ -71,4 +77,6 @@ func (u *UserController) UpdateAvatar(c *gin.Context) {
 
 	currentUser := currentUser(c)
 	userModel.UpdateAvatar(data, currentUser.ID)
+
+	c.JSON(200, gin.H{"message": "Avatar updated"})
 }

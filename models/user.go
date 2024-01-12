@@ -17,6 +17,7 @@ type User struct {
 	Password   string             `json:"-" bson:"password"`
 	IsVerified bool               `json:"-" bson:"is_verified"`
 	AvatarKey  string             `json:"avatar_key" bson:"avatar_key"`
+	AvatarUrl  string             `json:"avatar_url" bson:"-"`
 }
 
 type UserModel struct{}
