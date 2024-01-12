@@ -2,13 +2,11 @@ package main
 
 import (
 	"book-organizer/controllers"
-	"book-organizer/models"
-	"time"
+	"book-organizer/middlewares"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func main() {
@@ -40,6 +38,7 @@ func setupRouter() *gin.Engine {
 			ExposeHeaders:    []string{"Content-Length"},
 			AllowCredentials: true,
 		}),
+		new(middlewares.LimitFileSizeMiddleware).BodySizeMiddleware,
 	)
 	v1 := router.Group("/api/v1")
 	{
@@ -53,7 +52,7 @@ func setupRouter() *gin.Engine {
 		// TODO: move it to auth require block after test
 		v1.POST("/file/single", file.UploadSingleFile)
 	}
-	v1.Use(AuthRequired)
+	v1.Use(new(middlewares.AuthMiddleware).AuthRequired)
 	{
 		v1.GET("/users/me", user.ShowDetail)
 		v1.PATCH("/users/change_password", user.UpdatePassword)
@@ -67,18 +66,4 @@ func setupRouter() *gin.Engine {
 	}
 
 	return router
-}
-
-func AuthRequired(c *gin.Context) {
-	sessionModel := new(models.SessionModel)
-	userModel := new(models.UserModel)
-
-	token := c.GetHeader("Token")
-	session, _ := sessionModel.FindOne(token)
-	_, err := userModel.FindOne(session.UserID)
-
-	currentTime := primitive.NewDateTimeFromTime(time.Now())
-	if err != nil || session.ExpireTime < currentTime {
-		c.AbortWithStatusJSON(401, gin.H{"error": "Unauthorized"})
-	}
 }
