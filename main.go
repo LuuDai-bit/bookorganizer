@@ -39,6 +39,7 @@ func setupRouter() *gin.Engine {
 			AllowCredentials: true,
 		}),
 		new(middlewares.LimitFileSizeMiddleware).BodySizeMiddleware,
+		gin.Recovery(),
 	)
 	v1 := router.Group("/api/v1")
 	{
