@@ -36,8 +36,14 @@
                      type="file"
                      class="hidden"
                      ref="fileInput"
+                     accept="image/*"
                      @change="uploadImage" />
             </label>
+          </div>
+
+          <div v-if="currentImage">
+            <span>Preview:</span>
+            <img alt="" :src="currentImage" class="rounded w-20 h-20" />
           </div>
         </div>
 
@@ -73,6 +79,7 @@ export default {
       key: '',
       nameKey: {},
       disable: true,
+      currentImage: "",
     }
   },
   components: {
@@ -88,6 +95,7 @@ export default {
       this.$emit('closeChangeAvatarModal')
     },
     uploadImage() {
+      this.previewImage()
       if(this.nameKey[this.$refs.fileInput.files[0]]) {
         this.key = this.nameKey[this.$refs.fileInput.files[0]]
 
@@ -102,7 +110,16 @@ export default {
       }).catch(function(error) {
         if(error.response.data.message) notifyError(error.response.data.message)
       })
-    }
+    },
+    previewImage() {
+      const file = this.$refs.fileInput.files[0]
+
+      const theReader = new FileReader();
+      theReader.onloadend = async () => {
+        this.currentImage = await theReader.result;
+      };
+      theReader.readAsDataURL(file);
+    },
   }
 }
 </script>

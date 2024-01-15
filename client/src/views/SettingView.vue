@@ -9,7 +9,7 @@
 
     <br>
 
-    <Avartar :url="user.avatar_url"/>
+    <Avatar :url="user.avatar_url"/>
 
     <div class="inline-block max-w-[60%]">
       <div class="w-48 border-solid border-2 border-grey-900 text-center mr-1 mb-2 inline-block">
@@ -63,7 +63,7 @@ import FunctionButton from '@/components/common/FunctionButton.vue';
 import ChangePassWordForm from '@/components/settings/ChangePasswordForm.vue';
 import userApis from '@/api/users';
 import session_apis from '@/api/sessions';
-import Avartar from '@/components/settings/Avartar.vue';
+import Avatar from '@/components/settings/Avatar.vue';
 import ChangeAvatarForm from '@/components/settings/ChangeAvatarForm.vue';
 
 export default {
@@ -72,7 +72,7 @@ export default {
     Breadcrumb,
     FunctionButton,
     ChangePassWordForm,
-    Avartar,
+    Avatar,
     ChangeAvatarForm,
 },
   data() {
