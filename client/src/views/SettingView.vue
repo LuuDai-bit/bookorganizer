@@ -9,9 +9,8 @@
 
     <br>
 
-    <div class="inline-block mr-5 w-[30%]">
-      Avatar ...
-    </div>
+    <Avartar :url="user.avatar_url"/>
+
     <div class="inline-block max-w-[60%]">
       <div class="w-48 border-solid border-2 border-grey-900 text-center mr-1 mb-2 inline-block">
         Name
@@ -54,6 +53,7 @@ import FunctionButton from '@/components/common/FunctionButton.vue';
 import ChangePassWordForm from '@/components/settings/ChangePasswordForm.vue';
 import userApis from '@/api/users';
 import session_apis from '@/api/sessions';
+import Avartar from '@/components/settings/Avartar.vue';
 
 export default {
   name: "SettingView",
@@ -61,7 +61,8 @@ export default {
     Breadcrumb,
     FunctionButton,
     ChangePassWordForm,
-  },
+    Avartar
+},
   data() {
     return {
       user: {},
