@@ -48,4 +48,16 @@ HTTP.interceptors.response.use(function(response) {
   return Promise.reject(error);
 })
 
+const HTTPWithoutInterceptor = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+  headers: {
+    Token: {
+      toString() {
+        return localStorage.getItem('token')
+      }
+    }
+  }
+})
+
 export default HTTP;
+export { HTTPWithoutInterceptor }

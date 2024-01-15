@@ -1,6 +1,6 @@
 <template>
 <!-- Main modal -->
-<div id="default-modal"
+  <div id="default-modal"
         tabindex="-1"
         aria-hidden="true"
         class="backdrop-blur overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -129,7 +129,6 @@ export default {
       this.$emit('closeChangePasswordModal')
     },
     onSubmit(id, password, newPassword) {
-      // call api change password
       userApis.changePassword(id, password, newPassword)
     },
     validate () {

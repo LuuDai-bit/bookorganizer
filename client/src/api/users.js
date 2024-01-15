@@ -1,5 +1,5 @@
 import HTTP from './http';
-import { notifyError } from './notification';
+import { notifyError, notifySuccess } from './notification';
 import router from '../router/index';
 
 const userApis = {
@@ -23,6 +23,16 @@ const userApis = {
 
     return response
   },
+
+  async changeAvatar(key) {
+    const response = await HTTP.patch(`/users/change_avatar`, {
+      key: key,
+    }).then(function (response) {
+      if(response.data.message) notifySuccess(response.data.message)
+    }).catch(function(error) {
+      if(error.response.data.message) notifyError(error.response.data.message)
+    })
+  }
 }
 
 export default userApis
