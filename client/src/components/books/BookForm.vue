@@ -310,7 +310,7 @@ export default {
       })
     },
     checkWarning() {
-      if(this.currentBook.key) {
+      if(this.currentBook.key && !this.book) {
         this.warning = true
         return
       }
