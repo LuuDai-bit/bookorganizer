@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var bookModel = new(models.BookModel)
@@ -72,4 +73,21 @@ func (b *BookController) UpdateBook(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"message": "Success"})
+}
+
+func (b *BookController) Download(c *gin.Context) {
+	id := c.Query("id")
+	bookId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		c.JSON(400, gin.H{"message": "Download failed"})
+		c.Abort()
+
+		return
+	}
+
+	user := currentUser(c)
+
+	url := bookModel.DownloadEbook(user.ID, bookId)
+
+	c.JSON(200, gin.H{"message": "Success", url: url})
 }

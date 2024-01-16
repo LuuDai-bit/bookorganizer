@@ -58,6 +58,7 @@ func setupRouter() *gin.Engine {
 		v1.GET("/books/:page", book.GetBooks)
 		v1.POST("/books/create", book.CreateBook)
 		v1.PATCH("/books/update", book.UpdateBook)
+		v1.GET("books/download", book.Download)
 		v1.POST("/reviews/create", review.CreateReview)
 		v1.PATCH("/reviews/update", review.UpdateReview)
 		v1.GET("/statistic/books/read/:year", statistic.CountBook)

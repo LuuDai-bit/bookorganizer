@@ -2,6 +2,7 @@ package models
 
 import (
 	"book-organizer/forms"
+	"book-organizer/services"
 	"context"
 	"time"
 
@@ -123,6 +124,19 @@ func (b *BookModel) UpdateBook(userID primitive.ObjectID, book forms.UpdateBookC
 	_, err = collection.UpdateOne(nil, filter, update)
 
 	return err
+}
+
+func (b *BookModel) DownloadEbook(userID primitive.ObjectID, id primitive.ObjectID) string {
+	collection := dbConnect.Database(databaseName).Collection("books")
+	filter := bson.D{{Key: "user_id", Value: userID}, {Key: "_id", Value: id}}
+
+	var book Book
+	collection.FindOne(nil, filter).Decode(&book)
+
+	s3Handler := new(services.S3Handler)
+	url := s3Handler.GeneratePresignUrl(book.Key)
+
+	return url
 }
 
 func ConvertBookDateField(purchaseDate string, startReadAt string, finishReadAt string) (*time.Time, *time.Time, *time.Time, error) {

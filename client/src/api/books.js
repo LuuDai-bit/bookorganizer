@@ -8,34 +8,42 @@ const bookApis = {
     return response
   },
 
-  async createBook(name, author, purchaseDate, startReadAt, finishReadAt, key, fileName, type, categories) {
+  async createBook(book) {
     const response = await HTTP.post(`/books/create`, {
-      name: name,
-      author: author,
-      purchaseDate: formatDateWithFormat(purchaseDate, 'YYYY-MM-DD'),
-      startReadAt: formatDateWithFormat(startReadAt, 'YYYY-MM-DD hh:mm:ss'),
-      finishReadAt: formatDateWithFormat(finishReadAt, 'YYYY-MM-DD hh:mm:ss'),
-      key: key,
-      fileName: fileName,
-      type: type,
-      categories: categories,
+      name: book.name,
+      author: book.author,
+      purchaseDate: formatDateWithFormat(book.purchaseDate, 'YYYY-MM-DD'),
+      startReadAt: formatDateWithFormat(book.startReadAt, 'YYYY-MM-DD hh:mm:ss'),
+      finishReadAt: formatDateWithFormat(book.finishReadAt, 'YYYY-MM-DD hh:mm:ss'),
+      key: book.key,
+      fileName: book.fileName,
+      type: book.type,
+      categories: book.categories,
     })
 
     return response
   },
 
-  async updateBook(id, name, author, purchaseDate, startReadAt, finishReadAt, key, fileName, type, categories) {
+  async updateBook(book) {
     const response = await HTTP.patch(`/books/update`, {
-      id: id,
-      name: name,
-      author: author,
-      purchaseDate: formatDateWithFormat(purchaseDate, 'YYYY-MM-DD'),
-      startReadAt: formatDateWithFormat(startReadAt, 'YYYY-MM-DD hh:mm:ss'),
-      finishReadAt: formatDateWithFormat(finishReadAt, 'YYYY-MM-DD hh:mm:ss'),
-      key: key,
-      fileName: fileName,
-      type: type,
-      categories: categories,
+      id: book.id,
+      name: book.name,
+      author: book.author,
+      purchaseDate: formatDateWithFormat(book.purchaseDate, 'YYYY-MM-DD'),
+      startReadAt: formatDateWithFormat(book.startReadAt, 'YYYY-MM-DD hh:mm:ss'),
+      finishReadAt: formatDateWithFormat(book.finishReadAt, 'YYYY-MM-DD hh:mm:ss'),
+      key: book.key,
+      fileName: book.fileName,
+      type: book.type,
+      categories: book.categories,
+    })
+
+    return response
+  },
+
+  async download(id) {
+    const response = await HTTP.get(`/books/download`, {
+      params: { id: id }
     })
 
     return response
