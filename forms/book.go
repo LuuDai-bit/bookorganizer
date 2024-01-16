@@ -6,6 +6,9 @@ type CreateBookCommand struct {
 	PurchaseDate string   `json:"purchaseDate" bson:"purchaseDate" validate:"required"`
 	StartReadAt  string   `json:"startReadAt" bson:"startReadAt"`
 	FinishReadAt string   `json:"finishReadAt" bson:"finishReadAt"`
+	Key          string   `json:"key" bson:"key"`
+	FileName     string   `json:"fileName" bson:"fileName"`
+	Type         string   `json:"type" bson:"type"`
 	Categories   []string `json:"categories" bson:"categories"`
 }
 
@@ -14,7 +17,10 @@ type UpdateBookCommand struct {
 	Name         string   `json:"name" bson:"name" validate:"required"`
 	Author       string   `json:"author" bson:"author" validate:"required"`
 	PurchaseDate string   `json:"purchaseDate" bson:"purchaseDate" validate:"required"`
-	StartReadAt  string   `json:"startReadAt" bson:"startReadAt" validate:"required"`
-	FinishReadAt string   `json:"finishReadAt" bson:"finishReadAt" validate:"required"`
+	StartReadAt  string   `json:"startReadAt" bson:"startReadAt"`
+	FinishReadAt string   `json:"finishReadAt" bson:"finishReadAt"`
+	Key          string   `json:"key" bson:"key"`
+	FileName     string   `json:"fileName" bson:"fileName"`
+	Type         string   `json:"type" bson:"type"`
 	Categories   []string `json:"categories" bson:"categories"`
 }

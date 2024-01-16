@@ -10,6 +10,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type BookType string
+
+const (
+	paperback BookType = "paperback"
+	ebook     BookType = "ebook"
+)
+
 type Book struct {
 	ID           primitive.ObjectID `bson:"_id" json:"id"`
 	UserID       primitive.ObjectID `bson:"user_id" json:"user_id"`
@@ -18,6 +25,9 @@ type Book struct {
 	PurchaseDate primitive.DateTime `json:"purchase_date,omitempty" bson:"purchase_date,omitempty"`
 	StartReadAt  primitive.DateTime `json:"start_read_at,omitempty" bson:"start_read_at,omitempty"`
 	FinishReadAt primitive.DateTime `json:"finish_read_at,omitempty" bson:"finish_read_at,omitempty"`
+	FileName     string             `json:"file_name" bson:"file_name"`
+	Key          string             `json:"-" bson:"key,omitempty"`
+	Type         BookType           `json:"type,omitempty" bson:"type,omitempty" default:"normal"`
 	Categories   []string           `json:"categories" bson:"categories"`
 	Reviews      []Review           `json:"reviews" bson:"reviews"`
 }
@@ -76,6 +86,9 @@ func (b *BookModel) CreateBook(userID primitive.ObjectID, book forms.CreateBookC
 		"start_read_at":  PStartReadAt,
 		"finish_read_at": PFinishReadAt,
 		"categories":     book.Categories,
+		"file_name":      book.FileName,
+		"key":            book.Key,
+		"type":           book.Type,
 	})
 
 	return err
@@ -102,6 +115,9 @@ func (b *BookModel) UpdateBook(userID primitive.ObjectID, book forms.UpdateBookC
 		{Key: "start_read_at", Value: PStartReadAt},
 		{Key: "finish_read_at", Value: PFinishReadAt},
 		{Key: "categories", Value: book.Categories},
+		{Key: "key", Value: book.Key},
+		{Key: "file_name", Value: book.FileName},
+		{Key: "type", Value: book.Type},
 	}}}
 
 	_, err = collection.UpdateOne(nil, filter, update)

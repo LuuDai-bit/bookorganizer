@@ -8,20 +8,23 @@ const bookApis = {
     return response
   },
 
-  async createBook(name, author, purchaseDate, startReadAt, finishReadAt, categories) {
+  async createBook(name, author, purchaseDate, startReadAt, finishReadAt, key, fileName, type, categories) {
     const response = await HTTP.post(`/books/create`, {
       name: name,
       author: author,
       purchaseDate: formatDateWithFormat(purchaseDate, 'YYYY-MM-DD'),
       startReadAt: formatDateWithFormat(startReadAt, 'YYYY-MM-DD hh:mm:ss'),
       finishReadAt: formatDateWithFormat(finishReadAt, 'YYYY-MM-DD hh:mm:ss'),
+      key: key,
+      fileName: fileName,
+      type: type,
       categories: categories,
     })
 
     return response
   },
 
-  async updateBook(id, name, author, purchaseDate, startReadAt, finishReadAt, categories) {
+  async updateBook(id, name, author, purchaseDate, startReadAt, finishReadAt, key, fileName, type, categories) {
     const response = await HTTP.patch(`/books/update`, {
       id: id,
       name: name,
@@ -29,6 +32,9 @@ const bookApis = {
       purchaseDate: formatDateWithFormat(purchaseDate, 'YYYY-MM-DD'),
       startReadAt: formatDateWithFormat(startReadAt, 'YYYY-MM-DD hh:mm:ss'),
       finishReadAt: formatDateWithFormat(finishReadAt, 'YYYY-MM-DD hh:mm:ss'),
+      key: key,
+      fileName: fileName,
+      type: type,
       categories: categories,
     })
 
