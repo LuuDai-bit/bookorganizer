@@ -4,6 +4,7 @@ import (
 	"book-organizer/controllers"
 	"book-organizer/jobs"
 	"book-organizer/middlewares"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -33,7 +34,7 @@ func setupRouter() *gin.Engine {
 	file := new(controllers.FileController)
 	router.Use(
 		cors.New(cors.Config{
-			AllowOrigins:     []string{"*"},
+			AllowOrigins:     []string{os.Getenv("ALLOW_ORIGIN")},
 			AllowMethods:     []string{"POST", "PUT", "PATCH", "GET", "DELETE", "OPTIONS"},
 			AllowHeaders:     []string{"*"},
 			ExposeHeaders:    []string{"Content-Length"},
