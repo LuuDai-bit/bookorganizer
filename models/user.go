@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type User struct {
@@ -158,4 +159,21 @@ func (u *UserModel) VerifyAccount(email string) error {
 	_, err := collection.UpdateOne(nil, filter, update)
 
 	return err
+}
+
+func (u *UserModel) AvatarKeys() []string {
+	collection := dbConnect.Database(databaseName).Collection("users")
+
+	opts := options.Find().SetProjection(bson.D{{Key: "avatar_key", Value: 1}})
+	cursor, err := collection.Find(context.TODO(), nil, opts)
+	if err != nil {
+		panic(err)
+	}
+
+	var avatarKeys []string
+	if err = cursor.All(context.TODO(), &avatarKeys); err != nil {
+		panic(err)
+	}
+
+	return avatarKeys
 }

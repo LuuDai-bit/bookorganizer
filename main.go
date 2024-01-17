@@ -2,6 +2,7 @@ package main
 
 import (
 	"book-organizer/controllers"
+	"book-organizer/jobs"
 	"book-organizer/middlewares"
 
 	"github.com/gin-contrib/cors"
@@ -65,6 +66,9 @@ func setupRouter() *gin.Engine {
 		v1.GET("/statistic/categories/favorite", statistic.GetFavoriteCateogries)
 		v1.POST("/file/single", file.UploadSingleFile)
 	}
+
+	cron := new(jobs.Cron)
+	go cron.RunSchedule()
 
 	return router
 }

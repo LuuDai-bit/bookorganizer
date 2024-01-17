@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type BookType string
@@ -174,4 +175,21 @@ func ConvertBookDateField(purchaseDate string, startReadAt string, finishReadAt 
 	}
 
 	return PPurchaseDate, PStartReadAt, PFinishReadAt, err
+}
+
+func (u *BookModel) EbookKeys() []string {
+	collection := dbConnect.Database(databaseName).Collection("books")
+
+	opts := options.Find().SetProjection(bson.D{{Key: "key", Value: 1}})
+	cursor, err := collection.Find(context.TODO(), nil, opts)
+	if err != nil {
+		panic(err)
+	}
+
+	var ebookKeys []string
+	if err = cursor.All(context.TODO(), &ebookKeys); err != nil {
+		panic(err)
+	}
+
+	return ebookKeys
 }

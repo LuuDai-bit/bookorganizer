@@ -80,3 +80,14 @@ func (s *S3Handler) GeneratePresignUrl(key string) string {
 
 	return urlStr
 }
+
+func (s *S3Handler) DeleteObject(key string) error {
+	session := s.S3Instance()
+
+	_, err := s3.New(session).DeleteObject(&s3.DeleteObjectInput{
+		Bucket: aws.String(os.Getenv("AWS_S3_BUCKET")),
+		Key:    aws.String(key),
+	})
+
+	return err
+}
