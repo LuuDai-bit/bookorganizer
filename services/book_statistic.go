@@ -2,12 +2,13 @@ package services
 
 import (
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type BookStatistic struct{}
 
-func (b *BookStatistic) NumberOfBookRead(year string) []bson.M {
+func (b *BookStatistic) NumberOfBookRead(userID primitive.ObjectID, year string) []bson.M {
 	collection := prepareCollection("books")
 	year_format := bson.D{
 		{Key: "$dateToString", Value: bson.D{
@@ -15,9 +16,12 @@ func (b *BookStatistic) NumberOfBookRead(year string) []bson.M {
 			{Key: "format", Value: "%Y"},
 		}},
 	}
-	attr := bson.D{{Key: "year", Value: year_format}}
+	attr := bson.D{{Key: "year", Value: year_format}, {Key: "user_id", Value: 1}}
 	project := bson.D{{Key: "$project", Value: attr}}
-	filter := bson.D{{Key: "$match", Value: bson.D{{Key: "year", Value: year}}}}
+	filter := bson.D{{Key: "$match", Value: bson.D{
+		{Key: "year", Value: year},
+		{Key: "user_id", Value: userID},
+	}}}
 	count := bson.D{
 		{Key: "$count", Value: "book_count"},
 	}

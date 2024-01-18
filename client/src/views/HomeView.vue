@@ -92,6 +92,7 @@ import session_apis from "../api/sessions";
 import MenuCard from "@/components/home/MenuCard.vue";
 import Breadcrumb from '@/components/common/Breadcrumb.vue';
 import Footer from "@/components/common/Footer.vue";
+import statisticApis from "@/api/statistic";
 
 export default {
   name: 'DashboardHome',
@@ -100,18 +101,36 @@ export default {
     Breadcrumb,
     Footer,
   },
+  created() {
+    this.fetchNumberOfNewBook()
+    this.fetchFavoriteCategories()
+  },
   data() {
     return {
       name: "Stranger",
-      numberOfBook: "199",
-      numberOfReview: "299",
-      numberOfNewBook: "13",
+      numberOfBook: 199,
+      numberOfReview: 299,
+      numberOfNewBook: 13,
+      favoriteCategories: [],
     }
   },
   methods: {
     logout () {
       session_apis.logout();
     },
+    fetchNumberOfNewBook() {
+      const d = new Date()
+      const self = this
+      statisticApis.countBookByYear(d.getFullYear()).then(function(response) {
+        self.numberOfBook = response.data.result[0].book_count
+      })
+    },
+    fetchFavoriteCategories() {
+      const self = this
+      statisticApis.getFavoriteCategories().then(function(response) {
+        self.favoriteCategories = response.data.result
+      })
+    }
   }
 }
 </script>

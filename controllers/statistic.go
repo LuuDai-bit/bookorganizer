@@ -18,8 +18,9 @@ func (s *StatisticController) CountBook(c *gin.Context) {
 		return
 	}
 
+	user := currentUser(c)
 	statistic := new(services.BookStatistic)
-	result := statistic.NumberOfBookRead(year)
+	result := statistic.NumberOfBookRead(user.ID, year)
 
 	c.JSON(200, gin.H{"message": "Success", "result": result})
 }
