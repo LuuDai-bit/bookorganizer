@@ -32,6 +32,7 @@
                   id="name"
                   type="text"
                   placeholder="Joe Doe"
+                  maxlength="50"
                   v-model="currentBook.name">
             <div class="input-errors" v-for="error of v$.currentBook.name.$errors" :key="error.$uid">
               <div class="error-msg">{{ error.$message }}</div>
@@ -46,6 +47,7 @@
                   id="author"
                   type="text"
                   placeholder="Robert"
+                  maxlength="30"
                   v-model="currentBook.author">
             <div class="input-errors" v-for="error of v$.currentBook.author.$errors" :key="error.$uid">
               <div class="error-msg">{{ error.$message }}</div>

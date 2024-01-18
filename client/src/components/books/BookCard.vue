@@ -1,6 +1,6 @@
 <template>
   <div class="inline-block mr-5 mb-5 w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-    <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400 inline">{{ book.name }}</h5>
+    <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400 block-inline whitespace-nowrap overflow-hidden text-ellipsis w-10/12">{{ book.name }}</h5>
     <svg xmlns="http://www.w3.org/2000/svg"
          fill="none"
          viewBox="0 0 24 24"
@@ -14,7 +14,7 @@
 
     <ul role="list" class="space-y-5 my-7">
       <li class="flex items-center">
-        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Author: {{ book.author }}</span>
+        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3 whitespace-nowrap overflow-hidden text-ellipsis">Author: {{ book.author }}</span>
       </li>
       <li class="flex items-center">
         <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Purchase date: {{ formatDate(book.purchase_date) }}</span>
@@ -29,7 +29,7 @@
         <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Type: {{ book.type || '~' }}</span>
       </li>
       <li class="flex items-center">
-        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Categories: {{ book.categories.join(', ') || '~' }}</span>
+        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3 whitespace-nowrap overflow-hidden text-ellipsis">Categories: {{ book.categories.join(', ') || '~' }}</span>
       </li>
     </ul>
 
