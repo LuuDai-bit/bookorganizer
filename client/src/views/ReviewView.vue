@@ -7,6 +7,11 @@
       <FunctionButton text="Logout" @clickHandler="out()"/>
     </div>
 
+    <div class="lg:flex justify-between items-center mb-6">
+      <div></div>
+      <Search @clickHandler="search"/>
+    </div>
+
     <div v-for="book in books">
       <div class="lg:flex justify-between items-center my-10">
         <h3 class="text-3xl font-bold dark:text-white inline">
@@ -49,6 +54,7 @@ import ReviewItem from '@/components/reviews/ReviewItem.vue';
 import FunctionButton from '@/components/common/FunctionButton.vue';
 import ReviewForm from '@/components/reviews/ReviewForm.vue';
 import Pagination from '@/components/common/Pagination.vue';
+import Search from '@/components/common/Search.vue';
 
 export default {
   name: "Review",
@@ -58,6 +64,7 @@ export default {
     FunctionButton,
     ReviewForm,
     Pagination,
+    Search,
   },
   data() {
     return {
@@ -67,6 +74,7 @@ export default {
       perPage: 20,
       book: null,
       isReview: false,
+      searchText: "",
     };
   },
   created() {
@@ -75,7 +83,7 @@ export default {
   methods: {
     fetchBooks() {
       let self = this;
-      bookApis.getBooks(this.page).then(function (response) {
+      bookApis.getBooks(this.page, this.searchText).then(function (response) {
         self.books = response.data.books || [];
         self.total = response.data.total;
       });
@@ -91,7 +99,13 @@ export default {
       this.page = page
       this.fetchBooks()
     },
+    search(searchText) {
+      console.log('in');
+      this.searchText = searchText
+      this.page = 1
+      this.fetchBooks()
+    },
   },
-  components: { Breadcrumb, ReviewItem, FunctionButton, ReviewForm, Pagination }
+  components: { Breadcrumb, ReviewItem, FunctionButton, ReviewForm, Pagination, Search }
 }
 </script>

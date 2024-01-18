@@ -45,7 +45,6 @@ func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int, search s
 	}
 
 	filter := bson.D{{Key: "$match", Value: filterStage}}
-
 	sort := bson.D{{Key: "$sort", Value: bson.D{{Key: "purchase_date", Value: -1}}}}
 	skip := bson.D{{Key: "$skip", Value: (page - 1) * 20}}
 	limit := bson.D{{Key: "$limit", Value: 20}}
