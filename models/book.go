@@ -36,9 +36,16 @@ type Book struct {
 
 type BookModel struct{}
 
-func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int) []Book {
+func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int, search string) []Book {
 	collection := dbConnect.Database(databaseName).Collection("books")
-	filter := bson.D{{Key: "$match", Value: bson.D{{Key: "user_id", Value: userID}}}}
+
+	filterStage := bson.D{{Key: "user_id", Value: userID}}
+	if search != "" {
+		filterStage = append(bson.D{{Key: "$text", Value: bson.D{{Key: "$search", Value: search}}}}, filterStage...)
+	}
+
+	filter := bson.D{{Key: "$match", Value: filterStage}}
+
 	sort := bson.D{{Key: "$sort", Value: bson.D{{Key: "purchase_date", Value: -1}}}}
 	skip := bson.D{{Key: "$skip", Value: (page - 1) * 20}}
 	limit := bson.D{{Key: "$limit", Value: 20}}
@@ -56,7 +63,7 @@ func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int) []Book {
 	return books
 }
 
-func (b *BookModel) GetTotalBookByUser(userID primitive.ObjectID) int64 {
+func (b *BookModel) GetTotalBookByUser(userID primitive.ObjectID, search string) int64 {
 	collection := dbConnect.Database(databaseName).Collection("books")
 	filter := bson.D{{Key: "user_id", Value: userID}}
 	total, err := collection.CountDocuments(context.TODO(), filter)

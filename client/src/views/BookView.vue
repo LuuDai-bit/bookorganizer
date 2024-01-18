@@ -9,6 +9,7 @@
 
     <div class="lg:flex justify-between items-center mb-6">
       <FunctionButton text="Create" @clickHandler="openModal(null)"/>
+      <Search @clickHandler="search"/>
     </div>
 
     <div v-if="books.length === 0">
@@ -42,6 +43,7 @@ import FunctionButton from '@/components/common/FunctionButton.vue';
 import BookForm from '@/components/books/BookForm.vue';
 import Pagination from '@/components/common/Pagination.vue';
 import ReviewForm from '@/components/reviews/ReviewForm.vue';
+import Search from '@/components/common/Search.vue';
 import bookApis from '@/api/books';
 import session_apis from '@/api/sessions';
 
@@ -54,7 +56,8 @@ export default {
     BookForm,
     Pagination,
     ReviewForm,
-  },
+    Search
+},
   data() {
     return {
       books: [],
@@ -64,6 +67,7 @@ export default {
       book: null,
       total: 0,
       perPage: 20,
+      searchText: "",
     }
   },
   created() {
@@ -72,7 +76,7 @@ export default {
   methods: {
     fetchBooks() {
       let self = this
-      bookApis.getBooks(this.page).then(function (response) {
+      bookApis.getBooks(this.page, this.searchText).then(function (response) {
         self.books = response.data.books || []
         self.total = response.data.total
       })
@@ -97,6 +101,12 @@ export default {
     },
     goToPage(page) {
       this.page = page
+      this.fetchBooks()
+    },
+    search(searchText) {
+      console.log('in');
+      this.searchText = searchText
+      this.page = 1
       this.fetchBooks()
     }
   }

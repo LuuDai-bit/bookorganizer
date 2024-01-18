@@ -2,8 +2,10 @@ import HTTP from './http';
 import { formatDateWithFormat } from '@/mixins/format_date';
 
 const bookApis = {
-  async getBooks(page) {
-    const response = await HTTP.get(`/books/${page || 1}`)
+  async getBooks(page, search="") {
+    const response = await HTTP.get(`/books/${page || 1}`, {
+      params: { s: search }
+    })
 
     return response
   },

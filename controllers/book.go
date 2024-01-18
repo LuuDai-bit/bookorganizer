@@ -21,10 +21,11 @@ func (b *BookController) GetBooks(c *gin.Context) {
 
 		return
 	}
+	search := c.Query("s")
 
 	user := currentUser(c)
-	books := bookModel.GetBooksByUser(user.ID, page)
-	total := bookModel.GetTotalBookByUser(user.ID)
+	books := bookModel.GetBooksByUser(user.ID, page, search)
+	total := bookModel.GetTotalBookByUser(user.ID, search)
 
 	c.JSON(200, gin.H{"message": "Success", "books": books, "total": total})
 }
