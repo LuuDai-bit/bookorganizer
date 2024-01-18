@@ -48,13 +48,14 @@
 </template>
 
 <script>
-import bookApis from '@/api/books';
 import Breadcrumb from '@/components/common/Breadcrumb.vue';
 import ReviewItem from '@/components/reviews/ReviewItem.vue';
 import FunctionButton from '@/components/common/FunctionButton.vue';
 import ReviewForm from '@/components/reviews/ReviewForm.vue';
 import Pagination from '@/components/common/Pagination.vue';
 import Search from '@/components/common/Search.vue';
+import bookApis from '@/api/books';
+import session_apis from '@/api/sessions';
 
 export default {
   name: "Review",
@@ -103,6 +104,9 @@ export default {
       this.searchText = searchText
       this.page = 1
       this.fetchBooks()
+    },
+    out() {
+      session_apis.logout()
     },
   },
   components: { Breadcrumb, ReviewItem, FunctionButton, ReviewForm, Pagination, Search }
