@@ -9,7 +9,8 @@
     <input type="search"
            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none"
            placeholder="Book name"
-           v-model="search">
+           v-model="search"
+           v-on:keyup.enter="clickHandler()">
     <button class="text-white absolute inset-y-0 end-0 w-16 flex items-center ps-3 bg-blue-500 hover:bg-blue-600 focus:outline-none rounded-e-lg text-white font-semibold shadow focus:ring-blue-300 font-medium rounded-e-lg text-sm dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             @click="clickHandler()">Search</button>
   </div>

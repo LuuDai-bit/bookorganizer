@@ -153,7 +153,8 @@
                     id="categories"
                     maxlength="20"
                     type="text"
-                    v-model="category">
+                    v-model="category"
+                    v-on:keyup.enter="addCategory(category)">
 
               <button type="button"
                       class="w-[2.875rem] h-[1.25] flex-shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-e-md border border-transparent text-white hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"

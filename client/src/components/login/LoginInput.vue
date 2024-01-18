@@ -23,7 +23,8 @@
              type="password"
              placeholder="******************"
              v-model="password"
-             @input="validate()">
+             @input="validate()"
+             v-on:keyup.enter="onSubmit(email, password)">
     </div>
     <div class="flex items-center justify-between">
       <SubmitButton text="Sign In"

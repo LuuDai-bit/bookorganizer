@@ -104,7 +104,6 @@ export default {
       this.fetchBooks()
     },
     search(searchText) {
-      console.log('in');
       this.searchText = searchText
       this.page = 1
       this.fetchBooks()
