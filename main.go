@@ -4,6 +4,7 @@ import (
 	"book-organizer/controllers"
 	"book-organizer/jobs"
 	"book-organizer/middlewares"
+	"book-organizer/migrates"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -70,6 +71,9 @@ func setupRouter() *gin.Engine {
 
 	cron := new(jobs.Cron)
 	go cron.RunSchedule()
+
+	indexMigration := new(migrates.IndexMigration)
+	indexMigration.Run()
 
 	return router
 }
