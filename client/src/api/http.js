@@ -14,10 +14,11 @@ const HTTP = axios.create({
 
 const handleVersion = (newVersion) => {
   let version = localStorage.getItem('version')
-  if(version == newVersion) return
+  if(version != newVersion) {
+    localStorage.setItem('version', newVersion)
+    window.location.reload()
+  }
 
-  localStorage.setItem('version', newVersion)
-  window.location.reload()
 }
 
 HTTP.interceptors.request.use(function(config) {
