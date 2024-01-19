@@ -18,7 +18,6 @@ const handleVersion = (newVersion) => {
     localStorage.setItem('version', newVersion)
     window.location.reload()
   }
-
 }
 
 HTTP.interceptors.request.use(function(config) {
@@ -56,6 +55,9 @@ HTTP.interceptors.response.use(function(response) {
   if(error.response.status === 401) {
     session_apis.logout()
   }
+
+  const newVersion = response.headers['client-version']
+  handleVersion(newVersion)
 
   return Promise.reject(error);
 })
