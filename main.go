@@ -38,10 +38,11 @@ func setupRouter() *gin.Engine {
 			AllowOrigins:     []string{os.Getenv("ALLOW_ORIGIN")},
 			AllowMethods:     []string{"POST", "PUT", "PATCH", "GET", "DELETE", "OPTIONS"},
 			AllowHeaders:     []string{"*"},
-			ExposeHeaders:    []string{"Content-Length"},
+			ExposeHeaders:    []string{"Content-Length", "Client-Version"},
 			AllowCredentials: true,
 		}),
 		new(middlewares.LimitFileSizeMiddleware).BodySizeMiddleware,
+		new(middlewares.ClientVersionHeaderMiddleware).AddClientVersionHeader,
 		gin.Recovery(),
 	)
 	v1 := router.Group("/api/v1")

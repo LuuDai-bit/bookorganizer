@@ -12,6 +12,14 @@ const HTTP = axios.create({
   }
 })
 
+const handleVersion = (newVersion) => {
+  let version = localStorage.getItem('version')
+  if(version == newVersion) return
+
+  localStorage.setItem('version', newVersion)
+  window.location.reload()
+}
+
 HTTP.interceptors.request.use(function(config) {
   let loading = document.getElementById('loading')
   if(loading && config.method != 'get') {
@@ -33,6 +41,9 @@ HTTP.interceptors.response.use(function(response) {
   if(loading && !loading.classList.contains('hidden')) {
     loading.classList.add('hidden')
   }
+
+  const newVersion = response.headers['client-version']
+  handleVersion(newVersion)
 
   return response
 },function(error) {
