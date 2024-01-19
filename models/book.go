@@ -187,14 +187,22 @@ func (u *BookModel) EbookKeys() []string {
 	collection := dbConnect.Database(databaseName).Collection("books")
 
 	opts := options.Find().SetProjection(bson.D{{Key: "key", Value: 1}})
-	cursor, err := collection.Find(context.TODO(), nil, opts)
+	filter := bson.D{{Key: "key", Value: bson.D{{Key: "$exists", Value: true}}}}
+	cursor, err := collection.Find(context.TODO(), filter, opts)
 	if err != nil {
 		panic(err)
 	}
 
-	var ebookKeys []string
-	if err = cursor.All(context.TODO(), &ebookKeys); err != nil {
+	var books []Book
+	if err = cursor.All(context.TODO(), &books); err != nil {
 		panic(err)
+	}
+
+	var ebookKeys []string
+	for _, book := range books {
+		if book.Key != "" {
+			ebookKeys = append(ebookKeys, book.Key)
+		}
 	}
 
 	return ebookKeys

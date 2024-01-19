@@ -165,14 +165,22 @@ func (u *UserModel) AvatarKeys() []string {
 	collection := dbConnect.Database(databaseName).Collection("users")
 
 	opts := options.Find().SetProjection(bson.D{{Key: "avatar_key", Value: 1}})
-	cursor, err := collection.Find(context.TODO(), nil, opts)
+	filter := bson.D{{Key: "avatar_key", Value: bson.D{{Key: "$exists", Value: true}}}}
+	cursor, err := collection.Find(context.TODO(), filter, opts)
 	if err != nil {
 		panic(err)
 	}
 
-	var avatarKeys []string
-	if err = cursor.All(context.TODO(), &avatarKeys); err != nil {
+	var users []User
+	if err = cursor.All(context.TODO(), &users); err != nil {
 		panic(err)
+	}
+
+	var avatarKeys []string
+	for _, user := range users {
+		if user.AvatarKey != "" {
+			avatarKeys = append(avatarKeys, user.AvatarKey)
+		}
 	}
 
 	return avatarKeys
