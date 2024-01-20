@@ -56,7 +56,7 @@ HTTP.interceptors.response.use(function(response) {
     session_apis.logout()
   }
 
-  const newVersion = response.headers['client-version']
+  const newVersion = error.response.headers['client-version']
   handleVersion(newVersion)
 
   return Promise.reject(error);
