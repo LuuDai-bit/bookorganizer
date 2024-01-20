@@ -35,8 +35,12 @@ func (v *VerifyModel) SendVerifyCode(email string) error {
 		return err
 	}
 
+	verifyCode, err := v.generateVerifyCode(email)
+	if err != nil {
+		return err
+	}
+
 	v.deleteAllPreviousVerifyCode(email)
-	verifyCode := v.generateVerifyCode(email)
 
 	verifyMail := new(mails.VerifyMail)
 	go verifyMail.SendVerifyCode(email, verifyCode)
@@ -59,12 +63,12 @@ func (v *VerifyModel) ValidateVerifyCode(email string, verifyCode string) error 
 
 	session, session_err := dbConnect.StartSession()
 	if session_err != nil {
-		panic(session_err)
+		return session_err
 	}
 	defer session.EndSession(context.TODO())
 
 	if transaction_err := session.StartTransaction(); transaction_err != nil {
-		panic(transaction_err)
+		return transaction_err
 	}
 
 	if err = mongo.WithSession(context.TODO(), session, func(sc mongo.SessionContext) error {
@@ -73,12 +77,12 @@ func (v *VerifyModel) ValidateVerifyCode(email string, verifyCode string) error 
 		v.deleteAllPreviousVerifyCode(email)
 
 		if err = session.CommitTransaction(sc); err != nil {
-			panic(err)
+			return err
 		}
 
 		return nil
 	}); err != nil {
-		panic(err)
+		return err
 	}
 
 	return err
@@ -90,11 +94,11 @@ func (v *VerifyModel) deleteAllPreviousVerifyCode(email string) {
 	_, err := collection.DeleteMany(nil, filter)
 
 	if err != nil {
-		panic(err)
+		return
 	}
 }
 
-func (v *VerifyModel) generateVerifyCode(email string) string {
+func (v *VerifyModel) generateVerifyCode(email string) (string, error) {
 	verifyCode := make([]byte, MaxLengthCode)
 	_, err := io.ReadAtLeast(rand.Reader, verifyCode, MaxLengthCode)
 	for i := 0; i < len(verifyCode); i++ {
@@ -110,8 +114,8 @@ func (v *VerifyModel) generateVerifyCode(email string) string {
 	_, err = collection.InsertOne(nil, verifyRecord)
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
-	return string(verifyCode)
+	return string(verifyCode), nil
 }

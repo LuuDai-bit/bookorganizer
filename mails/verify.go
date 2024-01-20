@@ -9,7 +9,7 @@ import (
 
 type VerifyMail struct{}
 
-func (s *VerifyMail) SendVerifyCode(destinationEmail string, verifyCode string) {
+func (s *VerifyMail) SendVerifyCode(destinationEmail string, verifyCode string) error {
 	to := []string{
 		destinationEmail,
 	}
@@ -20,7 +20,7 @@ func (s *VerifyMail) SendVerifyCode(destinationEmail string, verifyCode string) 
 	auth := smtp.PlainAuth("", from, password, smtpHost)
 	template, err := template.ParseFiles("templates/verify_code.html")
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	var body bytes.Buffer
@@ -35,7 +35,6 @@ func (s *VerifyMail) SendVerifyCode(destinationEmail string, verifyCode string) 
 	})
 
 	err = smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, body.Bytes())
-	if err != nil {
-		panic(err)
-	}
+
+	return err
 }

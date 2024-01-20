@@ -19,24 +19,27 @@ const (
 
 type S3Handler struct{}
 
-func (s *S3Handler) S3Instance() *session.Session {
+func (s *S3Handler) S3Instance() (*session.Session, error) {
 	session, err := session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("AWS_S3_REGION")),
 	})
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return session
+	return session, nil
 }
 
 func (s *S3Handler) UploadFile(fileHeader *multipart.FileHeader) (string, error) {
-	session := s.S3Instance()
+	session, err := s.S3Instance()
+	if err != nil {
+		return "", err
+	}
 
 	file, err := fileHeader.Open()
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	var fileSize int64 = fileHeader.Size
@@ -64,8 +67,11 @@ func (s *S3Handler) UploadFile(fileHeader *multipart.FileHeader) (string, error)
 	return key, err
 }
 
-func (s *S3Handler) GeneratePresignUrl(key string) string {
-	session := s.S3Instance()
+func (s *S3Handler) GeneratePresignUrl(key string) (string, error) {
+	session, err := s.S3Instance()
+	if err != nil {
+		return "", err
+	}
 
 	req, _ := s3.New(session).GetObjectRequest(&s3.GetObjectInput{
 		Bucket: aws.String(os.Getenv("AWS_S3_BUCKET")),
@@ -75,16 +81,19 @@ func (s *S3Handler) GeneratePresignUrl(key string) string {
 	urlStr, err := req.Presign(PresignURLTimeout * time.Minute)
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
-	return urlStr
+	return urlStr, nil
 }
 
 func (s *S3Handler) DeleteObject(key string) error {
-	session := s.S3Instance()
+	session, err := s.S3Instance()
+	if err != nil {
+		return err
+	}
 
-	_, err := s3.New(session).DeleteObject(&s3.DeleteObjectInput{
+	_, err = s3.New(session).DeleteObject(&s3.DeleteObjectInput{
 		Bucket: aws.String(os.Getenv("AWS_S3_BUCKET")),
 		Key:    aws.String(key),
 	})

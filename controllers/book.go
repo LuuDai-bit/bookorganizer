@@ -24,8 +24,21 @@ func (b *BookController) GetBooks(c *gin.Context) {
 	search := c.Query("s")
 
 	user := currentUser(c)
-	books := bookModel.GetBooksByUser(user.ID, page, search)
-	total := bookModel.GetTotalBookByUser(user.ID, search)
+	books, err := bookModel.GetBooksByUser(user.ID, page, search)
+	if err != nil {
+		c.JSON(400, gin.H{"message": "Error when get books"})
+		c.Abort()
+
+		return
+	}
+
+	total, err := bookModel.GetTotalBookByUser(user.ID, search)
+	if err != nil {
+		c.JSON(400, gin.H{"message": "Error when get books"})
+		c.Abort()
+
+		return
+	}
 
 	c.JSON(200, gin.H{"message": "Success", "books": books, "total": total})
 }
@@ -88,7 +101,13 @@ func (b *BookController) Download(c *gin.Context) {
 
 	user := currentUser(c)
 
-	url := bookModel.DownloadEbook(user.ID, bookId)
+	url, err := bookModel.DownloadEbook(user.ID, bookId)
+	if err != nil {
+		c.JSON(400, gin.H{"message": "Download failed"})
+		c.Abort()
+
+		return
+	}
 
 	c.JSON(200, gin.H{"message": "Success", url: url})
 }

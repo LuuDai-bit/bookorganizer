@@ -37,19 +37,22 @@ func (f *FileModel) RemoveUnusedFile() {
 	userKeys := userModel.AvatarKeys()
 
 	bookModel := new(BookModel)
-	bookKeys := bookModel.EbookKeys()
+	bookKeys, err := bookModel.EbookKeys()
+	if err != nil {
+		return
+	}
 
 	usedKeys := append(userKeys, bookKeys...)
 
 	opts := options.Find().SetProjection(bson.D{{Key: "key", Value: 1}})
 	cursor, err := collection.Find(context.TODO(), bson.D{}, opts)
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	var files []File
 	if err = cursor.All(context.TODO(), &files); err != nil {
-		panic(err)
+		return
 	}
 
 	var keys []string

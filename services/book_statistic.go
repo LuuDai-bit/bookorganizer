@@ -8,7 +8,7 @@ import (
 
 type BookStatistic struct{}
 
-func (b *BookStatistic) NumberOfBookRead(userID primitive.ObjectID, year string) []bson.M {
+func (b *BookStatistic) NumberOfBookRead(userID primitive.ObjectID, year string) ([]bson.M, error) {
 	collection := prepareCollection("books")
 	year_format := bson.D{
 		{Key: "$dateToString", Value: bson.D{
@@ -27,18 +27,18 @@ func (b *BookStatistic) NumberOfBookRead(userID primitive.ObjectID, year string)
 	}
 	cursor, err := collection.Aggregate(nil, mongo.Pipeline{project, filter, count})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var results []bson.M
 	if err = cursor.All(nil, &results); err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return results
+	return results, nil
 }
 
-func (b *BookStatistic) FavoriteCategories() []bson.M {
+func (b *BookStatistic) FavoriteCategories() ([]bson.M, error) {
 	collection := prepareCollection("books")
 	project := bson.D{
 		{Key: "$project", Value: bson.D{
@@ -70,13 +70,13 @@ func (b *BookStatistic) FavoriteCategories() []bson.M {
 
 	cursor, err := collection.Aggregate(nil, mongo.Pipeline{project, unwind, group, projectAfter, sort})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var results []bson.M
 	if err = cursor.All(nil, &results); err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return results
+	return results, nil
 }

@@ -55,12 +55,10 @@ func (s *SessionModel) FindOne(token string) (Session, error) {
 	return session, err
 }
 
-func (s *SessionModel) DeleteAllUserSession(userID primitive.ObjectID) {
+func (s *SessionModel) DeleteAllUserSession(userID primitive.ObjectID) error {
 	collection := dbConnect.Database(databaseName).Collection("sessions")
 	filter := bson.D{{Key: "user_id", Value: userID}}
 	_, err := collection.DeleteMany(nil, filter)
 
-	if err != nil {
-		panic(err)
-	}
+	return err
 }

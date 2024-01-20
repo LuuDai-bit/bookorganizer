@@ -36,7 +36,7 @@ type Book struct {
 
 type BookModel struct{}
 
-func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int, search string) []Book {
+func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int, search string) ([]Book, error) {
 	collection := dbConnect.Database(databaseName).Collection("books")
 
 	filterStage := bson.D{{Key: "user_id", Value: userID}}
@@ -51,26 +51,23 @@ func (b *BookModel) GetBooksByUser(userID primitive.ObjectID, page int, search s
 
 	cursor, err := collection.Aggregate(nil, mongo.Pipeline{filter, sort, skip, limit})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var books []Book
 	if err = cursor.All(nil, &books); err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return books
+	return books, err
 }
 
-func (b *BookModel) GetTotalBookByUser(userID primitive.ObjectID, search string) int64 {
+func (b *BookModel) GetTotalBookByUser(userID primitive.ObjectID, search string) (int64, error) {
 	collection := dbConnect.Database(databaseName).Collection("books")
 	filter := bson.D{{Key: "user_id", Value: userID}}
 	total, err := collection.CountDocuments(context.TODO(), filter)
-	if err != nil {
-		panic(err)
-	}
 
-	return total
+	return total, err
 }
 
 func (b *BookModel) CreateBook(userID primitive.ObjectID, book forms.CreateBookCommand) error {
@@ -133,7 +130,7 @@ func (b *BookModel) UpdateBook(userID primitive.ObjectID, book forms.UpdateBookC
 	return err
 }
 
-func (b *BookModel) DownloadEbook(userID primitive.ObjectID, id primitive.ObjectID) string {
+func (b *BookModel) DownloadEbook(userID primitive.ObjectID, id primitive.ObjectID) (string, error) {
 	collection := dbConnect.Database(databaseName).Collection("books")
 	filter := bson.D{{Key: "user_id", Value: userID}, {Key: "_id", Value: id}}
 
@@ -141,9 +138,9 @@ func (b *BookModel) DownloadEbook(userID primitive.ObjectID, id primitive.Object
 	collection.FindOne(nil, filter).Decode(&book)
 
 	s3Handler := new(services.S3Handler)
-	url := s3Handler.GeneratePresignUrl(book.Key)
+	url, err := s3Handler.GeneratePresignUrl(book.Key)
 
-	return url
+	return url, err
 }
 
 func ConvertBookDateField(purchaseDate string, startReadAt string, finishReadAt string) (*time.Time, *time.Time, *time.Time, error) {
@@ -183,19 +180,19 @@ func ConvertBookDateField(purchaseDate string, startReadAt string, finishReadAt 
 	return PPurchaseDate, PStartReadAt, PFinishReadAt, err
 }
 
-func (u *BookModel) EbookKeys() []string {
+func (u *BookModel) EbookKeys() ([]string, error) {
 	collection := dbConnect.Database(databaseName).Collection("books")
 
 	opts := options.Find().SetProjection(bson.D{{Key: "key", Value: 1}})
 	filter := bson.D{{Key: "key", Value: bson.D{{Key: "$exists", Value: true}}}}
 	cursor, err := collection.Find(context.TODO(), filter, opts)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var books []Book
 	if err = cursor.All(context.TODO(), &books); err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var ebookKeys []string
@@ -205,5 +202,5 @@ func (u *BookModel) EbookKeys() []string {
 		}
 	}
 
-	return ebookKeys
+	return ebookKeys, err
 }

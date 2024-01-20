@@ -84,27 +84,30 @@ func (u *UserModel) UpdatePassword(data forms.UpdateUserPasswordCommand) error {
 
 	session, session_err := dbConnect.StartSession()
 	if session_err != nil {
-		panic(session_err)
+		return session_err
 	}
 	defer session.EndSession(context.TODO())
 
 	if transaction_err := session.StartTransaction(); transaction_err != nil {
-		panic(transaction_err)
+		return transaction_err
 	}
 
 	var err error
 	if err = mongo.WithSession(context.TODO(), session, func(sc mongo.SessionContext) error {
 		_, err := collection.UpdateOne(nil, filter, update)
 		sessionModel := new(SessionModel)
-		sessionModel.DeleteAllUserSession(id)
+		err = sessionModel.DeleteAllUserSession(id)
+		if err != nil {
+			return err
+		}
 
 		if err = session.CommitTransaction(sc); err != nil {
-			panic(err)
+			return err
 		}
 
 		return nil
 	}); err != nil {
-		panic(err)
+		return err
 	}
 
 	return err
@@ -163,20 +166,20 @@ func (u *UserModel) VerifyAccount(email string) error {
 
 func (u *UserModel) AvatarKeys() []string {
 	collection := dbConnect.Database(databaseName).Collection("users")
+	var avatarKeys []string
 
 	opts := options.Find().SetProjection(bson.D{{Key: "avatar_key", Value: 1}})
 	filter := bson.D{{Key: "avatar_key", Value: bson.D{{Key: "$exists", Value: true}}}}
 	cursor, err := collection.Find(context.TODO(), filter, opts)
 	if err != nil {
-		panic(err)
+		return avatarKeys
 	}
 
 	var users []User
 	if err = cursor.All(context.TODO(), &users); err != nil {
-		panic(err)
+		return avatarKeys
 	}
 
-	var avatarKeys []string
 	for _, user := range users {
 		if user.AvatarKey != "" {
 			avatarKeys = append(avatarKeys, user.AvatarKey)

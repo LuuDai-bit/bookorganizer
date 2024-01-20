@@ -11,7 +11,7 @@ type Cron struct{}
 func (c *Cron) RunSchedule() {
 	s, err := gocron.NewScheduler()
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	fileModel := new(models.FileModel)
@@ -26,7 +26,7 @@ func (c *Cron) RunSchedule() {
 	)
 
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	s.Start()

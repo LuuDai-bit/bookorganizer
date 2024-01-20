@@ -59,7 +59,14 @@ func (u *UserController) ShowDetail(c *gin.Context) {
 
 	if user.AvatarKey != "" {
 		s3Handler := new(services.S3Handler)
-		user.AvatarUrl = s3Handler.GeneratePresignUrl(user.AvatarKey)
+		presignUrl, err := s3Handler.GeneratePresignUrl(user.AvatarKey)
+		if err != nil {
+			c.JSON(400, gin.H{"message": "Failed"})
+			c.Abort()
+			return
+		}
+
+		user.AvatarUrl = presignUrl
 	}
 
 	c.JSON(200, gin.H{"message": "Success", "user": user})
