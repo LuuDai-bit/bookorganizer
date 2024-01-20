@@ -54,7 +54,7 @@
                       @closeChangePasswordModal="closeChangePasswordModal()" />
   <ChangeAvatarForm v-if="changeAvatar"
                     @closeChangeAvatarModal="closeChangeAvatarModal()"
-                    @fetchUserDetail="fetchUserDetail()" />
+                    @fetchUserDetail="reload()" />
 </template>
 
 <script>
@@ -112,6 +112,9 @@ export default {
     },
     closeChangeAvatarModal() {
       this.changeAvatar = false
+    },
+    reload() {
+      window.location.reload()
     }
   }
 }
