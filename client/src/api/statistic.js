@@ -1,4 +1,4 @@
-import { HTTPWithoutInterceptor } from './http';
+import { HTTPWithoutInterceptor } from '@/utils/http';
 
 const statisticApis = {
   async countBookByYear(year) {

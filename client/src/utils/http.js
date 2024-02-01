@@ -1,5 +1,5 @@
 import axios from 'axios';
-import session_apis from './sessions';
+import session_apis from '../api/sessions';
 
 const HTTP = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,

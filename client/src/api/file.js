@@ -1,4 +1,4 @@
-import { HTTPWithoutInterceptor } from './http';
+import { HTTPWithoutInterceptor } from '@/utils/http';
 
 const headers = { 'Content-Type': 'multipart/form-data' }
 const fileApis = {

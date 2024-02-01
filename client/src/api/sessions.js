@@ -1,4 +1,4 @@
-import HTTP from './http';
+import HTTP from '@/utils/http';
 import { notifyError, notifySuccess } from './notification';
 import router from '../router/index';
 

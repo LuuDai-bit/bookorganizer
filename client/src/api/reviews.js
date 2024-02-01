@@ -1,4 +1,4 @@
-import HTTP from './http';
+import HTTP from '@/utils/http';
 
 const reviewApis = {
   async createReview(bookId, point, review) {

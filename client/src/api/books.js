@@ -1,4 +1,4 @@
-import HTTP from './http';
+import HTTP from '@/utils/http';
 import { formatDateWithFormat } from '@/mixins/format_date';
 
 const bookApis = {
