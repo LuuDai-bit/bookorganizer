@@ -3,11 +3,30 @@ package jobs
 import (
 	"book-organizer/models"
 	"book-organizer/services"
+
+	"github.com/go-co-op/gocron/v2"
 )
 
 type ImportGoogleBook struct{}
 
-func (i *ImportGoogleBook) ImportGoogleBook() {
+func (i *ImportGoogleBook) Perform(s gocron.Scheduler) {
+	_, err := s.NewJob(
+		gocron.DailyJob(
+			1,
+			gocron.NewAtTimes(
+				gocron.NewAtTime(23, 30, 0),
+			),
+		),
+		gocron.NewTask(i.importGoogleBook),
+	)
+
+	if err != nil {
+		// Write to log
+		return
+	}
+}
+
+func (i *ImportGoogleBook) importGoogleBook() {
 	fetchNewBook := new(services.FetchNewBook)
 	userModel := new(models.UserModel)
 	categories, err := userModel.GetFavoriteCategories()
