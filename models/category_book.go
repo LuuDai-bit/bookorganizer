@@ -7,7 +7,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type CategoryBook struct{}
+type CategoryBookModel struct{}
+type CategoryBook struct {
+	ID       string       `json:"_id" bson:"_id"`
+	Category string       `json:"category" bson:"category"`
+	Books    []GoogleBook `json:"books" bson:"books"`
+}
 type GoogleBook struct {
 	ID          string   `json:"_id" bson:"_id"`
 	Kind        string   `json:"kind" bson:"kind"`
@@ -18,7 +23,44 @@ type GoogleBook struct {
 	Categories  []string `json:"categories" bson:"categories"`
 }
 
-func (c *CategoryBook) Create(category string, books []GoogleBook) error {
+func (c *CategoryBookModel) GetSuggestedBooks(favoriteCategories []string) ([]GoogleBook, error) {
+	if favoriteCategories == nil || len(favoriteCategories) == 0 {
+		return nil, nil
+	}
+
+	collection := dbConnect.Database(databaseName).Collection("category_books")
+	filter := bson.D{
+		{Key: "category", Value: bson.D{
+			{Key: "$in", Value: favoriteCategories},
+		}},
+	}
+
+	cursor, err := collection.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+
+	var categoryBooks []CategoryBook
+	if err = cursor.All(context.TODO(), &categoryBooks); err != nil {
+		return nil, err
+	}
+
+	var books []GoogleBook
+	for _, categoryBook := range categoryBooks {
+		books = append(books, categoryBook.Books...)
+	}
+
+	var ids []string
+	for i := len(books) - 1; i >= 0; i-- {
+		if c.contains(ids, books[i].ID) {
+			books = append(books[:i], books[i+1:]...)
+		}
+	}
+
+	return books, err
+}
+
+func (c *CategoryBookModel) Create(category string, books []GoogleBook) error {
 	for _, book := range books {
 		validate_err := ValidateStruct(book)
 		if validate_err != nil {
@@ -52,10 +94,20 @@ func (c *CategoryBook) Create(category string, books []GoogleBook) error {
 	return nil
 }
 
-func (c *CategoryBook) DeleteByCategory(category string) error {
+func (c *CategoryBookModel) DeleteByCategory(category string) error {
 	collection := dbConnect.Database(databaseName).Collection("category_books")
 	filter := bson.D{{Key: "category", Value: category}}
 	_, err := collection.DeleteMany(context.TODO(), filter)
 
 	return err
+}
+
+func (c *CategoryBookModel) contains(ids []string, targetId string) bool {
+	for _, id := range ids {
+		if id == targetId {
+			return true
+		}
+	}
+
+	return false
 }

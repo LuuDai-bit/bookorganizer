@@ -43,7 +43,7 @@ func (i *ImportGoogleBook) importGoogleBook() {
 		}
 
 		formatedBooks := i.flattenGoogleBooks(books)
-		categoryBook := new(models.CategoryBook)
+		categoryBook := new(models.CategoryBookModel)
 		err = categoryBook.Create(category, formatedBooks)
 		if err != nil {
 			// Write to log
