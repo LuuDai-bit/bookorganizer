@@ -20,6 +20,7 @@ func NewRouter() *gin.Engine {
 	statistic := new(controllers.StatisticController)
 	verify := new(controllers.VerifyController)
 	file := new(controllers.FileController)
+	suggestedbook := new(controllers.SuggestedBookController)
 	router.Use(
 		cors.New(cors.Config{
 			AllowOrigins:     []string{os.Getenv("ALLOW_ORIGIN")},
@@ -55,6 +56,7 @@ func NewRouter() *gin.Engine {
 		v1.GET("/statistic/books/read/:year", statistic.CountBook)
 		v1.GET("/statistic/categories/favorite", statistic.GetFavoriteCateogries)
 		v1.POST("/file/single", file.UploadSingleFile)
+		v1.GET("/suggested_books", suggestedbook.GetSuggestedBooks)
 	}
 
 	return router
