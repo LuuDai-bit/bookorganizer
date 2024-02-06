@@ -9,8 +9,13 @@ type ImportGoogleBook struct{}
 
 func (i *ImportGoogleBook) ImportGoogleBook() {
 	fetchNewBook := new(services.FetchNewBook)
-	// TODO: replace this with list of categories from user
-	categories := []string{"ex1", "ex2", "fantasy"}
+	userModel := new(models.UserModel)
+	categories, err := userModel.GetFavoriteCategories()
+	if err != nil {
+		// Write to log
+		return
+	}
+
 	for _, category := range categories {
 		books, err := fetchNewBook.FetchGoogleBooks(category)
 		if err != nil {

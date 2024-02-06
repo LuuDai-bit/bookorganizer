@@ -201,6 +201,18 @@ func (u *UserModel) UpdateUserFavoriteCategories(results []bson.M, userID primit
 	return err
 }
 
+func (u *UserModel) GetFavoriteCategories() ([]string, error) {
+	collection := dbConnect.Database(databaseName).Collection("users")
+	results, err := collection.Distinct(context.TODO(), "favorite_categories", bson.D{})
+	var formatedResults []string
+	for _, result := range results {
+		formatedResult := result.(string)
+		formatedResults = append(formatedResults, formatedResult)
+	}
+
+	return formatedResults, err
+}
+
 func (u *UserModel) getMostFavoriteCategories(results []bson.M, maxFavoriteCategories int) []string {
 	favoriteCategories := []string{}
 
