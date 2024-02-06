@@ -12,13 +12,14 @@ import (
 )
 
 type User struct {
-	ID         primitive.ObjectID `bson:"_id" json:"id"`
-	Name       string             `json:"name" bson:"name"`
-	Email      string             `json:"email" bson:"email"`
-	Password   string             `json:"-" bson:"password"`
-	IsVerified bool               `json:"-" bson:"is_verified"`
-	AvatarKey  string             `json:"avatar_key" bson:"avatar_key"`
-	AvatarUrl  string             `json:"avatar_url" bson:"-"`
+	ID                 primitive.ObjectID `bson:"_id" json:"id"`
+	Name               string             `json:"name" bson:"name"`
+	Email              string             `json:"email" bson:"email"`
+	Password           string             `json:"-" bson:"password"`
+	IsVerified         bool               `json:"-" bson:"is_verified"`
+	AvatarKey          string             `json:"avatar_key" bson:"avatar_key"`
+	AvatarUrl          string             `json:"avatar_url" bson:"-"`
+	FavoriteCategories []string           `json:"favorite_categories" bson:"favorite_categories"`
 }
 
 type UserModel struct{}
@@ -187,4 +188,31 @@ func (u *UserModel) AvatarKeys() []string {
 	}
 
 	return avatarKeys
+}
+
+func (u *UserModel) UpdateUserFavoriteCategories(results []bson.M, userID primitive.ObjectID) error {
+	collection := dbConnect.Database(databaseName).Collection("users")
+	favoriteCategories := u.getMostFavoriteCategories(results, 5)
+
+	filter := bson.D{{Key: "_id", Value: userID}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "favorite_categories", Value: favoriteCategories}}}}
+	_, err := collection.UpdateOne(context.TODO(), filter, update)
+
+	return err
+}
+
+func (u *UserModel) getMostFavoriteCategories(results []bson.M, maxFavoriteCategories int) []string {
+	favoriteCategories := []string{}
+
+	for _, result := range results {
+		if maxFavoriteCategories < 1 {
+			break
+		}
+
+		value := result["categories"].(string)
+		favoriteCategories = append(favoriteCategories, value)
+		maxFavoriteCategories -= 1
+	}
+
+	return favoriteCategories
 }
