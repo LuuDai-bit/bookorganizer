@@ -35,12 +35,12 @@ func (v *VerifyModel) SendVerifyCode(email string) error {
 		return err
 	}
 
+	v.deleteAllPreviousVerifyCode(email)
+
 	verifyCode, err := v.generateVerifyCode(email)
 	if err != nil {
 		return err
 	}
-
-	v.deleteAllPreviousVerifyCode(email)
 
 	verifyMail := new(mails.VerifyMail)
 	go verifyMail.SendVerifyCode(email, verifyCode)
