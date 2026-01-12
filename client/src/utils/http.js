@@ -25,7 +25,6 @@ HTTP.interceptors.request.use(function(config) {
   if(loading && config.method != 'get') {
     loading.classList.remove('hidden')
   }
-
   return config
 },function(error) {
   let loading = document.getElementById('loading')
@@ -52,12 +51,12 @@ HTTP.interceptors.response.use(function(response) {
     loading.classList.add('hidden')
   }
 
-  if(error.response.status === 401) {
+  if(error.response?.status === 401) {
     session_apis.logout()
   }
 
-  const newVersion = error.response.headers['client-version']
-  handleVersion(newVersion)
+  const newVersion = error.response?.headers['client-version']
+  if (newVersion) handleVersion(newVersion)
 
   return Promise.reject(error);
 })

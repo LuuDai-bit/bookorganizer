@@ -12,10 +12,12 @@ const session_apis = {
       if(response.data.message) notifySuccess(response.data.message)
       router.push({ path: '/' })
     }).catch(function (error) {
-      if(error.response.data.needVerify) {
+      if(error.response?.data?.needVerify) {
         router.push({ name: 'verify', query: { email: email } })
-      } else if(error.response.data.message) {
+      } else if(error.response?.data?.message) {
         notifyError(error.response.data.message)
+      } else {
+        notifyError('An unknown error occurred during login.')
       }
     });
   },
