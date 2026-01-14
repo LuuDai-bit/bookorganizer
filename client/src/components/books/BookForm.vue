@@ -25,10 +25,10 @@
         <!-- Modal body -->
         <div class="p-4 md:p-5 space-y-4">
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+            <label class="block text-sm font-bold mb-2" for="name">
               Name
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            <input class="text-gray-700 shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                   id="name"
                   type="text"
                   placeholder="Joe Doe"
@@ -40,7 +40,7 @@
           </div>
 
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="author">
+            <label class="block text-sm font-bold mb-2" for="author">
               Author
             </label>
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -55,7 +55,7 @@
           </div>
 
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="purchaseDate">
+            <label class="block text-sm font-bold mb-2" for="purchaseDate">
               Purchase Date
             </label>
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -68,7 +68,7 @@
           </div>
 
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="startReadAt">
+            <label class="block text-sm font-bold mb-2" for="startReadAt">
               Start Read At
             </label>
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -78,7 +78,7 @@
           </div>
 
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="startReadAt">
+            <label class="block text-sm font-bold mb-2" for="startReadAt">
               Finish Read At
             </label>
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -88,10 +88,10 @@
           </div>
 
           <div>
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="startReadAt">
+            <label class="block text-sm font-bold mb-2" for="startReadAt">
               Type
             </label>
-            <select class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+            <select class="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                     v-model="currentBook.type">
               <option value="paperback">Paperback</option>
               <option value="ebook">Ebook</option>
@@ -132,7 +132,7 @@
           </div>
 
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="startReadAt">
+            <label class="block text-sm font-bold mb-2" for="startReadAt">
               Categories
             </label>
             <div class="flex-wrap mb-1"
