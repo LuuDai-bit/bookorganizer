@@ -1,8 +1,6 @@
 package jobs
 
 import (
-	"book-organizer/models"
-
 	"github.com/go-co-op/gocron/v2"
 )
 
@@ -14,20 +12,9 @@ func (c *Cron) RunSchedule() {
 		return
 	}
 
-	fileModel := new(models.FileModel)
-	_, err = s.NewJob(
-		gocron.DailyJob(
-			1,
-			gocron.NewAtTimes(
-				gocron.NewAtTime(23, 30, 0),
-			),
-		),
-		gocron.NewTask(fileModel.RemoveUnusedFile),
-	)
+	new(RemoveUnusedFile).Perform(s)
 
-	if err != nil {
-		return
-	}
+	new(ImportGoogleBook).Perform(s)
 
 	s.Start()
 }
