@@ -18,6 +18,7 @@ func NewRouter() *gin.Engine {
 	book := new(controllers.BookController)
 	review := new(controllers.ReviewController)
 	statistic := new(controllers.StatisticController)
+	calendarDisplayer := new(controllers.CalendarDisplayerController)
 	verify := new(controllers.VerifyController)
 	file := new(controllers.FileController)
 	router.Use(
@@ -55,6 +56,7 @@ func NewRouter() *gin.Engine {
 		v1.GET("/statistic/books/read/:year", statistic.CountBook)
 		v1.GET("/statistic/categories/favorite", statistic.GetFavoriteCateogries)
 		v1.POST("/file/single", file.UploadSingleFile)
+		v1.GET("/calendars", calendarDisplayer.GetCalendars)
 	}
 
 	return router
